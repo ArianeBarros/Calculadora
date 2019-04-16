@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace apCalculadora
 {
-    class Expressao
+    public class Expressao
     {
         public static readonly bool[,] precedenciasDeSinais =
                                         {
