@@ -12,12 +12,13 @@ namespace apCalculadora
 {
     public partial class frmCalculadora : Form
     {
-        private PilhaHerdaLista<double> pilha;
+        private PilhaHerdaLista<Dado> pilha;
+        //private PilhaHerdaLista<double> pilha;
         //txtVisor.Text = txtVisor.Text.Length > 0 ? txtVisor.Text.Substring(0, txtVisor.Text.Length - 1) : "";
         public frmCalculadora()
         {
             InitializeComponent();
-            pilha = new PilhaHerdaLista<double>(); ;
+            pilha = new PilhaHerdaLista<Dado>(); 
         }
 
         private void btnUm_Click(object sender, EventArgs e)
@@ -43,45 +44,83 @@ namespace apCalculadora
         private void btnIgual_Click(object sender, EventArgs e)
         { 
             string texto = txtVisor.Text;
-            string[] vetor = null;
+            Dado[] vetor = null;
             int cont = 0;
 
             while (cont <= texto.Length)
                 foreach (var a in texto)
-                    vetor[cont] = a + "";
+                    vetor[cont] = a;
 
             SepararExpressao(vetor);
 
             txtVisor.Clear();
+            txtResultado.Text = ResolverExpressao();
         }
 
-        public void SepararExpressao(string[] vetor)
-        {
-            Pilha pilha = null;
-
-            if (!EstaEmOrdem(vetor))
-                return;
-
+        public void SepararExpressao(Dado[] vetor)
+        {     
             for (int b = 0; b < vetor.Length; b++)
                 if (char.Parse(vetor[b]) >= '0' && char.Parse(vetor[b]) <= '9') //Se o caractere atual for número
                 {
                     if (vetor[b - 1] != null && char.Parse(vetor[b - 1]) >= '0' && char.Parse(vetor[b - 1]) <= '9')
-                    {
-                        pilha.ExcluirTopo();
-                        pilha.InserirNoTopo(vetor[b - 1] + vetor[b], "número");
+                    {//Se o dado anterior taambém for um número
+                       pilha.Desempilhar();
+                       pilha.Empilhar(vetor[b - 1] + vetor[b]);
                     }                      
                     else
-                        pilha.InserirNoTopo(vetor[b], "número");
+                        pilha.Empilhar(vetor[b]); //pilha.Empilhar(vetor[b], "número");
                 }
                 else
                     if(char.Parse(vetor[b]) >= 'A' && char.Parse(vetor[b]) <= 'Z')  //Se o caractere atual for sinal
                          MessageBox.Show("Erro");
-                else //É um sinal
-                    pilha.InserirNoTopo(vetor[b] , "sinal");
+                    else //É um sinal
+                        pilha.Empilhar(vetor[b]);
 
+            //A variavel "pilha" tem a sequencia infixa, escrita pelo usuário
+            //Chamamos o método ParaPosfixa() para gerarmos a sequencia posfixa da expressao dada
+            pilha.ParaPosfixa();
+            lbSequencia.Text = Posfixa();
         }
 
-        public bool EstaEmOrdem(string[] vetor)
+        public string Posfixa()
+        {//Método que retorna a sequencia posfixa em forma de string
+            string posfixa = "";
+
+            PilhaHerdaLista<Dado> copy = pilha;
+
+            while(!copy.EstaVazia())  //Obtem a sequencia posfixa ao contrário
+                posfixa += copy.Desempilhar() + "";
+
+            //while (!copy.EstaVazia()) //Obtem a sequencia posfixa na ordem certa
+            //    posfixa += copy.Desempilhar() + "";
+
+            return posfixa;
+        }
+
+        public string ResolverExpressao()  //Aqui, a variavel pilha já está com a sequencia posfixa ao contrario, portanto podemos resolver a expressão
+        {
+            double? result = null;
+
+            if (!pilha.EstaEmOrdem(pilha))
+                return "Expressão incompleta!";
+
+            while(!pilha.EstaVazia())
+            {
+                Dado a = pilha.Desempilhar();
+                Dado b = pilha.Desempilhar();
+                Dado sinal = pilha.Desempilhar();
+                
+                //if(sinal.ToString() == ")" || sinal == "(")
+
+                result = double.Parse(a) + sinal.ToString() + double.Parse(b);
+                
+                pilha.Empilhar((Dado)result);
+            }
+
+            return result + "";
+        }
+
+        private void frmCalculadora_Load(object sender, EventArgs e)
         {
 
         }

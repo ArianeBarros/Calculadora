@@ -329,6 +329,7 @@
             this.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "frmCalculadora";
             this.Text = "Calculadora Cientifíca";
+            this.Load += new System.EventHandler(this.frmCalculadora_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

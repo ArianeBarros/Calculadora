@@ -38,4 +38,16 @@ public class PilhaHerdaLista<Dado> : ListaSimples<Dado>, IStack<Dado>
   {
     return base.EstaVazia;
   }
+
+    public bool EstaEmOrdem(PilhaHerdaLista<Dado> pilha) //Verificar se não tem sinal seguido de sinal e se todos os parênteses foram abertos e fechados igualmente
+    {
+        bool estaOrdenada = false;
+
+        return estaOrdenada;
+    }
+
+    public void ParaPosfixa()
+    {
+
+    }
 }
