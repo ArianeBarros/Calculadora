@@ -1,6 +1,6 @@
 ﻿namespace apCalculadora
 {
-    partial class frmCalculadora
+    partial class FrmCalculadora
     {
         /// <summary>
         /// Variável de designer necessária.

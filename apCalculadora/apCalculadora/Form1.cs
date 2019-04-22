@@ -10,12 +10,13 @@ using System.Windows.Forms;
 
 namespace apCalculadora
 {
-    public partial class frmCalculadora : Form
+    public partial class FrmCalculadora : Form  PilhaHerdaLista<Dado>, IStack<Dado>
+                                     where Dado : IComparable<Dado>
     {
         private PilhaHerdaLista<Dado> pilha;
         //private PilhaHerdaLista<double> pilha;
         //txtVisor.Text = txtVisor.Text.Length > 0 ? txtVisor.Text.Substring(0, txtVisor.Text.Length - 1) : "";
-        public frmCalculadora()
+        public FrmCalculadora()
         {
             InitializeComponent();
             pilha = new PilhaHerdaLista<Dado>(); 
