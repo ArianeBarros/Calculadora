@@ -297,7 +297,7 @@
             this.lbSequencia.TabIndex = 26;
             this.lbSequencia.Text = "label2";
             // 
-            // frmCalculadora
+            // FrmCalculadora
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(338, 371);
@@ -327,7 +327,7 @@
             this.Controls.Add(this.btnOito);
             this.Controls.Add(this.btnNove);
             this.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Name = "frmCalculadora";
+            this.Name = "FrmCalculadora";
             this.Text = "Calculadora Cientifíca";
             this.Load += new System.EventHandler(this.frmCalculadora_Load);
             this.ResumeLayout(false);

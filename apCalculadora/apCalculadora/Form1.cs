@@ -14,13 +14,13 @@ namespace apCalculadora
         //PilhaHerdaLista<Dado>, IStack<Dado>
         //                             where Dado : IComparable<Dado>
     {
-        private PilhaHerdaLista<string> pilha;
+        private Expressao pilha;
         //private PilhaHerdaLista<double> pilha;
         //txtVisor.Text = txtVisor.Text.Length > 0 ? txtVisor.Text.Substring(0, txtVisor.Text.Length - 1) : "";
         public FrmCalculadora()
         {
             InitializeComponent();
-            pilha = new PilhaHerdaLista<string>(); 
+           
         }
 
         private void btnUm_Click(object sender, EventArgs e)
@@ -46,85 +46,37 @@ namespace apCalculadora
         private void btnIgual_Click(object sender, EventArgs e)
         { 
             string texto = txtVisor.Text;
-            string[] vetor = null;
-            int cont = 0;
-
-            while (cont <= texto.Length)
-                foreach (var a in texto)
-                    vetor[cont] = a + "";
-
-            SepararExpressao(vetor);
-
-            txtVisor.Clear();
-            txtResultado.Text = ResolverExpressao();
-        }
-
-        public void SepararExpressao(string[] vetor)
-        {     
-            for (int b = 0; b < vetor.Length; b++)
-                if (char.Parse(vetor[b]) >= '0' && char.Parse(vetor[b]) <= '9') //Se o caractere atual for número
+            string[] vetor = new string[txtVisor.Text.Length];
+            
+            for (int i = 0; i < texto.Length; i++)
+            {            
+                if (texto[i] >= '0' && texto[i] <= '9') //Se o caractere atual for número
                 {
-                    if (vetor[b - 1] != null && char.Parse(vetor[b - 1]) >= '0' && char.Parse(vetor[b - 1]) <= '9')
-                    {//Se o dado anterior taambém for um número
-                       pilha.Desempilhar();
-                       pilha.Empilhar(vetor[b - 1] + vetor[b]);
-                    }                      
+                    if (i != 0 && (char)texto[i - 1] >= '0' && (char)texto[i - 1] <= '9')
+                    {//Se o dado anterior também for um número
+                        vetor[i] = texto[i] + texto[i - 1] + "";
+                    }
                     else
-                        pilha.Empilhar(vetor[b]); //pilha.Empilhar(vetor[b], "número");
+                        vetor[i] = texto[i] + "";
                 }
                 else
-                    if(char.Parse(vetor[b]) >= 'A' && char.Parse(vetor[b]) <= 'Z')  //Se o caractere atual for sinal
-                         MessageBox.Show("Erro");
+                {
+                    if (texto[i] >= 'A' && texto[i] <= 'Z')  //Se o caractere atual for letra
+                        MessageBox.Show("Erro");
                     else //É um sinal
-                        pilha.Empilhar(vetor[b]);
-
-            //A variavel "pilha" tem a sequencia infixa, escrita pelo usuário
-            //Chamamos o método ParaPosfixa() para gerarmos a sequencia posfixa da expressao dada
-            pilha.ParaPosfixa();
-            lbSequencia.Text = Posfixa();
-        }
-
-        public string Posfixa()
-        {//Método que retorna a sequencia posfixa em forma de string
-            string posfixa = "";
-
-            PilhaHerdaLista<string> copy = pilha;
-
-            while(!copy.EstaVazia())  //Obtem a sequencia posfixa ao contrário
-                posfixa += copy.Desempilhar() + "";
-
-            //while (!copy.EstaVazia()) //Obtem a sequencia posfixa na ordem certa
-            //    posfixa += copy.Desempilhar() + "";
-
-            return posfixa;
-        }
-
-        public string ResolverExpressao()  //Aqui, a variavel pilha já está com a sequencia posfixa ao contrario, portanto podemos resolver a expressão
-        {
-            double? result = null;
-
-            if (!pilha.EstaEmOrdem(pilha))
-                return "Expressão incompleta!";
-
-            while(!pilha.EstaVazia())
-            {
-                string a = pilha.Desempilhar();
-                string b = pilha.Desempilhar();
-                string sinal = pilha.Desempilhar();
-                
-                //if(sinal.ToString() == ")" || sinal == "(")
-
-                result = double.Parse(a) + sinal + double.Parse(b);
-                
-                pilha.Empilhar(result + "");
+                       vetor[i] = texto[i] + "";
+                }
             }
 
-            return result + "";
-        }
+            txtVisor.Clear();
+            lbSequencia.Text = pilha.ParaPosfixa(texto);
 
+            pilha.Resolver();            
+            txtResultado.Text = pilha.ToString();         
+        }
         private void frmCalculadora_Load(object sender, EventArgs e)
         {
-
+            pilha = new Expressao();
         }
     }
 }
