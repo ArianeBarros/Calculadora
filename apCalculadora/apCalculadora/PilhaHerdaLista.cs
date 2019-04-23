@@ -3,6 +3,8 @@
 public class PilhaHerdaLista<Dado> : ListaSimples<Dado>, IStack<Dado> 
                                      where Dado : IComparable<Dado>
 {
+    int qtd = 0;
+
   public PilhaHerdaLista() : base()
   { 
     // construtor
@@ -31,8 +33,9 @@ public class PilhaHerdaLista<Dado> : ListaSimples<Dado>, IStack<Dado>
 
   public int Tamanho()
   {
-    return QuantosNos;
-  }
+        return qtd;
+        //return QuantosNos;
+    }
 
   public new bool EstaVazia()
   {
@@ -46,8 +49,23 @@ public class PilhaHerdaLista<Dado> : ListaSimples<Dado>, IStack<Dado>
         return estaOrdenada;
     }
 
-    public void ParaPosfixa()
-    {
+    public PilhaHerdaLista<Dado> ParaPosfixa()
+    {//pilha está em formato infixa
 
+       PilhaHerdaLista<Dado> aux = this;
+       PilhaHerdaLista<Dado> posfixa = null;
+
+        for (int i = 0; i < this.Tamanho(); i++)
+        {
+            posfixa.Empilhar(aux.OTopo());
+            aux.Desempilhar();
+        }                    
+
+        //aqui, posfixa guarda a pilha ao contrario
+
+       
+
+
+        return posfixa;
     }
 }

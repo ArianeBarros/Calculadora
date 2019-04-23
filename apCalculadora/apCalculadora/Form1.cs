@@ -10,16 +10,17 @@ using System.Windows.Forms;
 
 namespace apCalculadora
 {
-    public partial class FrmCalculadora : Form  PilhaHerdaLista<Dado>, IStack<Dado>
-                                     where Dado : IComparable<Dado>
+    public partial class FrmCalculadora : Form  
+        //PilhaHerdaLista<Dado>, IStack<Dado>
+        //                             where Dado : IComparable<Dado>
     {
-        private PilhaHerdaLista<Dado> pilha;
+        private PilhaHerdaLista<string> pilha;
         //private PilhaHerdaLista<double> pilha;
         //txtVisor.Text = txtVisor.Text.Length > 0 ? txtVisor.Text.Substring(0, txtVisor.Text.Length - 1) : "";
         public FrmCalculadora()
         {
             InitializeComponent();
-            pilha = new PilhaHerdaLista<Dado>(); 
+            pilha = new PilhaHerdaLista<string>(); 
         }
 
         private void btnUm_Click(object sender, EventArgs e)
@@ -45,12 +46,12 @@ namespace apCalculadora
         private void btnIgual_Click(object sender, EventArgs e)
         { 
             string texto = txtVisor.Text;
-            Dado[] vetor = null;
+            string[] vetor = null;
             int cont = 0;
 
             while (cont <= texto.Length)
                 foreach (var a in texto)
-                    vetor[cont] = a;
+                    vetor[cont] = a + "";
 
             SepararExpressao(vetor);
 
@@ -58,7 +59,7 @@ namespace apCalculadora
             txtResultado.Text = ResolverExpressao();
         }
 
-        public void SepararExpressao(Dado[] vetor)
+        public void SepararExpressao(string[] vetor)
         {     
             for (int b = 0; b < vetor.Length; b++)
                 if (char.Parse(vetor[b]) >= '0' && char.Parse(vetor[b]) <= '9') //Se o caractere atual for número
@@ -87,7 +88,7 @@ namespace apCalculadora
         {//Método que retorna a sequencia posfixa em forma de string
             string posfixa = "";
 
-            PilhaHerdaLista<Dado> copy = pilha;
+            PilhaHerdaLista<string> copy = pilha;
 
             while(!copy.EstaVazia())  //Obtem a sequencia posfixa ao contrário
                 posfixa += copy.Desempilhar() + "";
@@ -107,15 +108,15 @@ namespace apCalculadora
 
             while(!pilha.EstaVazia())
             {
-                Dado a = pilha.Desempilhar();
-                Dado b = pilha.Desempilhar();
-                Dado sinal = pilha.Desempilhar();
+                string a = pilha.Desempilhar();
+                string b = pilha.Desempilhar();
+                string sinal = pilha.Desempilhar();
                 
                 //if(sinal.ToString() == ")" || sinal == "(")
 
-                result = double.Parse(a) + sinal.ToString() + double.Parse(b);
+                result = double.Parse(a) + sinal + double.Parse(b);
                 
-                pilha.Empilhar((Dado)result);
+                pilha.Empilhar(result + "");
             }
 
             return result + "";
