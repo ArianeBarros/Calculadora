@@ -14,125 +14,200 @@ namespace apCalculadora
             pilha = new PilhaHerdaLista<string>();
         }
 
-        public string ParaPosfixa(string expressaoInteira)
-        {
-            string pos = "";
-            char ultimoCaractere = ' ';
-            int contSinal = 0;
-            int qtdCarac = 0;
-
-            while(qtdCarac != expressaoInteira.Length)
-            {
-                while (contSinal != 2)
-                {
-                    foreach (var c in expressaoInteira)
-                    {
-                        if (c == '+' || c == '-' || c == '/' || c == '*' || c == '^')
-                            contSinal++;
-                        else
-                            ultimoCaractere = c;
-
-                        qtdCarac++;
-                    }                       
-                }
-                string aux = expressaoInteira.Split(ultimoCaractere)[0];
-                pos += UmaParteParaPosfixa(aux);
-            }         
-
-            return pos;
-        }
-
-        public string UmaParteParaPosfixa(string str)
+        public string ParaPosfixa(string expressaoInfixa)
         {
             string posfixa = "";
-            string operadorA = "";
-            string operadorB = "";
-            string sinal = "";
+            
 
-            for (int i = 0; i < str.Length; i++)
-            {
-                if (str[i] >= '0' && str[i] <= '9')//Se for número
-                { 
-                    if (operadorA == "")
+            //if (EstaEmOrdem(pilha))
+            //{
+                foreach (var a in expressaoInfixa)
+                {
+                    if (a >= '0' && a <= '9')
                     {
-                        operadorA = str[i] + "";
-                        posfixa += operadorA;
+                        posfixa += a;
                     }
                     else
                     {
-                        if (sinal == "") //não achamos um sinal ainda
+                        if (a == '+' || a == '-' || a == '/' || a == '*' || a == '^') //É sinal
                         {
-                            posfixa = "";
-                            operadorA += str[i] + "";
-                            posfixa += operadorA;
-                        }
-                        else //já achamos um sinal, portanto o próximo valor será o operador B
-                        {
-                            if(sinal == ",")
-                            {
-                                operadorA += str[i] + "";
-                                posfixa = operadorA;
-                                sinal = "";
-                            }
+                            if(pilha.EstaVazia())
+                                 pilha.Empilhar(a + "");
 
-                            if (i < str.Length - 1)
+                            if(SeTemPreferencia(pilha.OTopo(), a + ""))//Verifica se oq está empilhado tem preferencia
                             {
-                                if (operadorB == "")
-                                    operadorB = str[i] + "";
-                                else
-                                {
-                                    posfixa = operadorA;
-                                    operadorB += str[i] + "";
-                                }
-                                posfixa += operadorB;
+                                  string sinal = pilha.Desempilhar();
+                                  posfixa += sinal;
                             }
-                            else //a sequencia string vai acabar
-                            {
-                                if (operadorB == "")
-                                    operadorB = str[i] + "";
-                                else
-                                {
-                                    posfixa = operadorA;
-                                    operadorB += str[i] + "";
-                                }
-                                posfixa += operadorB + sinal;
-                                operadorA = "";
-                                operadorB = "";
-                                sinal = "";
-                            }
+                            pilha.Empilhar(a + "");
                         }
                     }
+
                 }
-                else
-                    if (str[i] >= 'A' && str[i] <= 'Z') //se não for sinal
-                    {
-                        //ueee
-                    }
-                    else
-                        if (sinal == "")
-                        {
-                            if (sinal == ",")
-                            {
-                                operadorA += ",";
-                                posfixa += ",";
-                            }                                
-                            else
-                                sinal = str[i] + "";
-                        }
-                        else //outra sequencia vai começar
-                        {
-                            if (operadorB == "")
-                                operadorB = "0";
-                                                       
-                            posfixa += operadorB + sinal;
-                            operadorA = "";
-                            operadorB = "";
-                            sinal = "";
-                        }
+                return posfixa;
+            //}           
+
+            //1+2*3+4
+        }
+
+        public bool SeTemPreferencia(string empilhado, string emComparacao)
+        {
+            if (empilhado == ")")
+                return false;
+
+            if (empilhado == "(")
+            {
+                if (emComparacao != ")")
+                    return true;
+
+                return false;
+            }
+               
+            if (empilhado == "^")
+            {
+                if (emComparacao != "(")
+                    return false;
+                return true;
             }
 
-            return posfixa;
+            if(empilhado == "*" || empilhado == "/")
+            {
+                if (emComparacao == "(" || emComparacao == "^")
+                    return false;
+
+                return true;
+            }
+
+            if(empilhado == "+" || empilhado == "-")
+            {
+                if (emComparacao == "+" || emComparacao == "-" || emComparacao == ")")
+                    return true;
+
+                return false;
+            }
+
+            return false;//ou n seiii
         }
+
+        //public string ParaPosfixa(string expressaoInteira)
+        //{
+        //    string pos = "";
+        //    char ultimoCaractere = ' ';
+        //    int contSinal = 0;
+        //    int qtdCarac = 0;
+
+        //    while(qtdCarac != expressaoInteira.Length)
+        //    {
+        //        while (contSinal != 2)
+        //        {
+        //            foreach (var c in expressaoInteira)
+        //            {
+        //                if (c == '+' || c == '-' || c == '/' || c == '*' || c == '^')
+        //                    contSinal++;
+        //                else
+        //                    ultimoCaractere = c;
+
+        //                qtdCarac++;
+        //            }                       
+        //        }
+        //        string aux = expressaoInteira.Split(ultimoCaractere)[0];
+        //        pos += UmaParteParaPosfixa(aux);
+        //    }         
+
+        //    return pos;
+        //}
+
+        //public string UmaParteParaPosfixa(string str)
+        //{
+        //    string posfixa = "";
+        //    string operadorA = "";
+        //    string operadorB = "";
+        //    string sinal = "";
+
+        //    for (int i = 0; i < str.Length; i++)
+        //    {
+        //        if (str[i] >= '0' && str[i] <= '9')//Se for número
+        //        { 
+        //            if (operadorA == "")
+        //            {
+        //                operadorA = str[i] + "";
+        //                posfixa += operadorA;
+        //            }
+        //            else
+        //            {
+        //                if (sinal == "") //não achamos um sinal ainda
+        //                {
+        //                    posfixa = "";
+        //                    operadorA += str[i] + "";
+        //                    posfixa += operadorA;
+        //                }
+        //                else //já achamos um sinal, portanto o próximo valor será o operador B
+        //                {
+        //                    if(sinal == ",")
+        //                    {
+        //                        operadorA += str[i] + "";
+        //                        posfixa = operadorA;
+        //                        sinal = "";
+        //                    }
+
+        //                    if (i < str.Length - 1)
+        //                    {
+        //                        if (operadorB == "")
+        //                            operadorB = str[i] + "";
+        //                        else
+        //                        {
+        //                            posfixa = operadorA;
+        //                            operadorB += str[i] + "";
+        //                        }
+        //                        posfixa += operadorB;
+        //                    }
+        //                    else //a sequencia string vai acabar
+        //                    {
+        //                        if (operadorB == "")
+        //                            operadorB = str[i] + "";
+        //                        else
+        //                        {
+        //                            posfixa = operadorA;
+        //                            operadorB += str[i] + "";
+        //                        }
+        //                        posfixa += operadorB + sinal;
+        //                        operadorA = "";
+        //                        operadorB = "";
+        //                        sinal = "";
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        else
+        //            if (str[i] >= 'A' && str[i] <= 'Z') //se não for sinal
+        //            {
+        //                //ueee
+        //            }
+        //            else
+        //                if (sinal == "")
+        //                {
+        //                    if (sinal == ",")
+        //                    {
+        //                        operadorA += ",";
+        //                        posfixa += ",";
+        //                    }                                
+        //                    else
+        //                        sinal = str[i] + "";
+        //                }
+        //                else //outra sequencia vai começar
+        //                {
+        //                    if (operadorB == "")
+        //                        operadorB = "0";
+                                                       
+        //                    posfixa += operadorB + sinal;
+        //                    operadorA = "";
+        //                    operadorB = "";
+        //                    sinal = "";
+        //                }
+        //    }
+
+        //    return posfixa;
+        //}
         public void Resolver()
         {
 
