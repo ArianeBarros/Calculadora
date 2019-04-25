@@ -17,41 +17,48 @@ namespace apCalculadora
         public string ParaPosfixa(string expressaoInfixa)
         {
             string posfixa = "";
-            
-
-            //if (EstaEmOrdem(pilha))
-            //{
+            int cont = 2;
+            string sinal = "";
+                        
                 foreach (var a in expressaoInfixa)
                 {
                     if (a >= '0' && a <= '9')
                     {
-                        posfixa += a;
+                        if (cont % 2 == 0 && sinal == "") //se for for 
+                            posfixa += a;
+                        else
+                        {
+                            posfixa += a + sinal;
+                            sinal = "";
+                        }
                     }
                     else
                     {
                         if (a == '+' || a == '-' || a == '/' || a == '*' || a == '^') //É sinal
                         {
+                             sinal = a + "";
+
                             if(pilha.EstaVazia())
                                  pilha.Empilhar(a + "");
 
                             if(SeTemPreferencia(pilha.OTopo(), a + ""))//Verifica se oq está empilhado tem preferencia
                             {
-                                  string sinal = pilha.Desempilhar();
-                                  posfixa += sinal;
+                                  posfixa += pilha.Desempilhar(); 
                             }
                             pilha.Empilhar(a + "");
                         }
                     }
 
                 }
-                return posfixa;
-            //}           
 
-            //1+2*3+4
+                return posfixa;
         }
 
         public bool SeTemPreferencia(string empilhado, string emComparacao)
         {
+            if (empilhado == emComparacao)
+                return false;
+
             if (empilhado == ")")
                 return false;
 
@@ -208,8 +215,16 @@ namespace apCalculadora
 
         //    return posfixa;
         //}
-        public void Resolver()
+        public string Resolver(string expressao)
         {
+            string result = "";
+            //string aux = ParaPosfixa(expressao);
+
+            //string operadorA = "";
+            //string operadorB = "";
+            //string sinal = "";
+
+            //string[] vetAux = aux.Split();
 
             //string posfixa = this.ToString();
             //string operadorA = "";
@@ -270,6 +285,8 @@ namespace apCalculadora
             //            }                            
             //        }               
             //}
+
+            return result;
         }
 
         //public string ResolverUmaOperacao(string a, string b,string s)
