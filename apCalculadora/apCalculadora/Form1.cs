@@ -52,7 +52,7 @@ namespace apCalculadora
             {            
                 if (texto[i] >= '0' && texto[i] <= '9') //Se o caractere atual for número
                 {
-                    if (i != 0 && (char)texto[i - 1] >= '0' && (char)texto[i - 1] <= '9')
+                    if (i != 0 && texto[i - 1] >= '0' && texto[i - 1] <= '9')
                     {//Se o dado anterior também for um número
                         vetor[i] = texto[i] + texto[i - 1] + "";
                     }
@@ -64,14 +64,17 @@ namespace apCalculadora
                     if (texto[i] >= 'A' && texto[i] <= 'Z')  //Se o caractere atual for letra
                         MessageBox.Show("Erro");
                     else //É um sinal
-                       vetor[i] = texto[i] + "";
+                    {
+                        vetor[i] = texto[i] + "";
+                    }
+                       
                 }
             }
 
-            txtVisor.Clear();
+           // txtVisor.Clear();
             lbSequencia.Text = pilha.ParaPosfixa(texto);
 
-            pilha.Resolver();            
+            pilha.Resolver(texto);            
             txtResultado.Text = pilha.ToString();         
         }
         private void frmCalculadora_Load(object sender, EventArgs e)
