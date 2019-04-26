@@ -19,16 +19,15 @@ namespace apCalculadora
 
         public string ParaPosfixa(string expressaoInfixa)
         {
-            char sinal = ' ';
             string posfixa = "";
             vetor = new int[26];
 
             if (!VerificarParenteses(expressaoInfixa))
                 return null;
 
-            for(int i = 0; i < expressaoInfixa.Length; i++)
+            for (int i = 0; i < expressaoInfixa.Length; i++)
             {
-                if(expressaoInfixa[i] >= '0' && expressaoInfixa[i] <= '9') //é número
+                while (i < expressaoInfixa.Length && expressaoInfixa[i] >= '0' && expressaoInfixa[i] <= '9') //é número
                 {
                     int posicaoInicial = i;
                     string num = "";
@@ -36,29 +35,28 @@ namespace apCalculadora
                         num += expressaoInfixa[i++];
 
                     vetor[i] += int.Parse(num);
-                    i = posicaoInicial + num.Length;
+                    //i++;
+                    //i = posicaoInicial + num.Length;
                 }
-                while (expressaoInfixa[i] >= '0' && expressaoInfixa[i] <= '9') //é número
-                {
-                    vetor[i] += expressaoInfixa[i];
-                    i++;
-                }
-                if(SeEhSinal(expressaoInfixa[i])) //é sinal
-                {
-                    if (SeTemPreferencia(pilha.OTopo(), expressaoInfixa[i] + "") && !pilha.EstaVazia())//Verifica se oq está empilhado tem preferencia
+                if (i >= expressaoInfixa.Length)
+                    continue;
+                else
+                    if (!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), expressaoInfixa[i] + ""))//Verifica se oq está empilhado tem preferencia
                     {
-                        sinal = Convert.ToChar(pilha.Desempilhar());
+                        char sinal  = Convert.ToChar(pilha.Desempilhar());
+                        pilha.Empilhar(expressaoInfixa[i] + "");
+                        pilha.Empilhar(sinal + "");
                     }
                     else
                     {
                         pilha.Empilhar(expressaoInfixa[i] + "");
                     }
-                }                
             }
 
-            for(int indice = 0; indice < vetor.Length; indice++)
+            for (int indice = 'A'; indice < vetor.Length && !(pilha.EstaVazia()); indice++)
             {
-                posfixa += (indice + 'A') + pilha.Desempilhar();
+               if(vetor[indice - 'A'] != 0)
+                    posfixa += (indice + 'A'); // + pilha.Desempilhar()
             }
 
             return posfixa;
@@ -178,73 +176,40 @@ namespace apCalculadora
         public string Resolver(string expressao)
         {
             string result = "";
-            //string aux = ParaPosfixa(expressao);
+            char sinal = ' ';
 
-            //string operadorA = "";
-            //string operadorB = "";
-            //string sinal = "";
+            for(int i = 0; i < expressao.Length; i++)
+            {
+                if(SeEhSinal(expressao[i]))
+                {
+                    if (sinal == ' ')
+                    {
+                        sinal = expressao[i];
+                        pilha.Empilhar(expressao[i] + "");
+                    }                        
+                    else //vemos a preferencia
+                    {
+                        if (SeTemPreferencia(pilha.OTopo(), expressao[i] + ""))
+                        {
+                            //resolver
 
-            //string[] vetAux = aux.Split();
+                        }
+                        else
+                            pilha.Empilhar(expressao[i] + "");
+                    }
+                }
+                else
+                    while (i != expressao.Length && expressao[i] >= '0' && expressao[i] <= '9') //é número
+                    {
+                        int posicaoInicial = i;
+                        string num = "";
+                        while (i + num.Length < expressao.Length && expressao[i] >= '0' && expressao[i] <= '9')
+                            num += expressao[i++];
+                        
 
-            //string posfixa = this.ToString();
-            //string operadorA = "";
-            //string operadorB = "";
-            //string sinal = "";
+                    }
 
-            //for(int i = 0; i < posfixa.Length; i++)
-            //{
-            //    if (posfixa[i] >= '0' && posfixa[i] <= '9')//Se for número
-            //        if (operadorA == "")
-            //        {
-            //            operadorA = posfixa[i] + "";
-            //            pilha.Empilhar(operadorA);
-            //        }                        
-            //        else
-            //        {
-            //            if (sinal == "") //não achamos um sinal ainda
-            //            {
-            //                operadorA += posfixa[i];
-            //                pilha.Desempilhar();
-            //                pilha.Empilhar(operadorA);
-            //            }                           
-            //            else //já achamos um sinal, portanto o próximo valor será o operador B
-            //            {
-            //                if (operadorB == "")
-            //                {
-            //                    operadorB = posfixa[i] + "";
-            //                    pilha.Empilhar(operadorB);
-            //                }                             
-            //                else
-            //                {
-            //                    operadorB += posfixa[i] + "";
-            //                    pilha.Desempilhar();
-            //                    pilha.Empilhar(operadorB);
-            //                    pilha.Empilhar(sinal);
-
-            //                    sinal = pilha.Desempilhar();
-            //                    operadorB = pilha.Desempilhar();
-            //                    operadorA = pilha.Desempilhar();
-
-            //                    pilha.Empilhar(ResolverUmaOperacao(operadorA, operadorB, sinal));
-            //                }                               
-            //            }
-            //        }
-            //    else
-            //        if (!(posfixa[i] >= 'A') && !(posfixa[i] <= 'Z')) //se for sinal
-            //        {
-            //            if (sinal == "")
-            //            {
-            //                if(sinal == ",")
-            //                    operadorA += ",";
-            //                else
-            //                    sinal = posfixa[i] + "";
-            //            }
-            //            else
-            //            {
-            //               //uee
-            //            }                            
-            //        }               
-            //}
+            }
 
             return result;
         }

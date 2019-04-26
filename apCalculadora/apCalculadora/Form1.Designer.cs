@@ -270,6 +270,7 @@
             this.txtVisor.Name = "txtVisor";
             this.txtVisor.Size = new System.Drawing.Size(319, 31);
             this.txtVisor.TabIndex = 23;
+            this.txtVisor.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtVisor_KeyPress);
             // 
             // btnCE
             // 
@@ -283,6 +284,7 @@
             // 
             // txtResultado
             // 
+            this.txtResultado.Enabled = false;
             this.txtResultado.Location = new System.Drawing.Point(12, 49);
             this.txtResultado.Name = "txtResultado";
             this.txtResultado.Size = new System.Drawing.Size(319, 31);
@@ -329,7 +331,7 @@
             this.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "FrmCalculadora";
             this.Text = "Calculadora Cientifíca";
-            this.Load += new System.EventHandler(this.frmCalculadora_Load);
+            this.Load += new System.EventHandler(this.FrmCalculadora_Load_1);
             this.ResumeLayout(false);
             this.PerformLayout();
 

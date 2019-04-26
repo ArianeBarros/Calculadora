@@ -11,8 +11,6 @@ using System.Windows.Forms;
 namespace apCalculadora
 {
     public partial class FrmCalculadora : Form  
-        //PilhaHerdaLista<Dado>, IStack<Dado>
-        //                             where Dado : IComparable<Dado>
     {
         private Expressao pilha;
         //private PilhaHerdaLista<double> pilha;
@@ -70,14 +68,19 @@ namespace apCalculadora
                        
                 }
             }
-
-           // txtVisor.Clear();
             lbSequencia.Text = pilha.ParaPosfixa(texto);
 
             pilha.Resolver(texto);            
             txtResultado.Text = pilha.ToString();         
+        }        
+
+        private void txtVisor_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(Char.IsNumber(e.KeyChar)) && !pilha.SeEhSinal(Convert.ToChar(e.KeyChar)))
+                e.Handled = true;
         }
-        private void frmCalculadora_Load(object sender, EventArgs e)
+
+        private void FrmCalculadora_Load_1(object sender, EventArgs e)
         {
             pilha = new Expressao();
         }
