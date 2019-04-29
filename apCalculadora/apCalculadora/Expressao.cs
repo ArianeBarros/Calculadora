@@ -10,7 +10,7 @@ namespace apCalculadora
     {
         PilhaHerdaLista<string> pilha;
                     //  0   1   2   3    4   5   6   7   8  9  10
-        int[] vetor;
+        double[] vetor;
                     //  A   B   C   D    E   F   G   H   I  J   K
         public Expressao()
         {
@@ -20,46 +20,90 @@ namespace apCalculadora
         public string ParaPosfixa(string expressaoInfixa)
         {
             string posfixa = "";
-            vetor = new int[26];
+            vetor = new double[26];
+            int qtd = 0;
+            int contSeNegativo = 0;
 
             if (!VerificarParenteses(expressaoInfixa))
                 return null;
 
             for (int i = 0; i < expressaoInfixa.Length; i++)
             {
-                while (i < expressaoInfixa.Length && expressaoInfixa[i] >= '0' && expressaoInfixa[i] <= '9') //é número
+                if (i < expressaoInfixa.Length && expressaoInfixa[i] >= '0' && expressaoInfixa[i] <= '9') //é número
                 {
                     int posicaoInicial = i;
                     string num = "";
                     while (i + num.Length < expressaoInfixa.Length && expressaoInfixa[i] >= '0' && expressaoInfixa[i] <= '9')
                         num += expressaoInfixa[i++];
 
-                    vetor[i] += int.Parse(num);
-                    //i++;
-                    //i = posicaoInicial + num.Length;
+                    vetor[qtd] = double.Parse(num);
+                    qtd++;
+                    i = posicaoInicial + num.Length - 1;
+
+                    contSeNegativo = 0;
                 }
-                if (i >= expressaoInfixa.Length)
-                    continue;
                 else
-                    if (!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), expressaoInfixa[i] + ""))//Verifica se oq está empilhado tem preferencia
+                {
+                    contSeNegativo++;
+                    if (contSeNegativo == 2)
                     {
-                        char sinal  = Convert.ToChar(pilha.Desempilhar());
-                        pilha.Empilhar(expressaoInfixa[i] + "");
-                        pilha.Empilhar(sinal + "");
+                        if(expressaoInfixa[i] == '+' || expressaoInfixa[i] == '-')
+                        {
+                            vetor[qtd] = '@';
+                            qtd++;
+                        }                             
+                        else
+                            if (!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), expressaoInfixa[i] + ""))//Verifica se oq está empilhado tem preferencia
+                            {
+                                char sinal = Convert.ToChar(pilha.Desempilhar());
+                                if (expressaoInfixa[i] != ')' && expressaoInfixa[i] != '(')
+                                {
+                                    pilha.Empilhar(expressaoInfixa[i] + "");
+                                    pilha.Empilhar(sinal + "");
+                                }
+                            }
+                            else
+                            {
+                                pilha.Empilhar(expressaoInfixa[i] + "");
+                            }
+                        contSeNegativo = 0;
                     }
                     else
                     {
-                        pilha.Empilhar(expressaoInfixa[i] + "");
-                    }
+                        if (!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), expressaoInfixa[i] + ""))//Verifica se oq está empilhado tem preferencia
+                        {
+                            char sinal = Convert.ToChar(pilha.Desempilhar());
+                            if (expressaoInfixa[i] != ')' && expressaoInfixa[i] != '(')
+                            {
+                                pilha.Empilhar(expressaoInfixa[i] + "");
+                                pilha.Empilhar(sinal + "");
+                            }
+                        }
+                        else
+                        {
+                            pilha.Empilhar(expressaoInfixa[i] + "");
+                        }                       
+                    }                   
+                }                   
             }
 
-            for (int indice = 'A'; indice < vetor.Length && !(pilha.EstaVazia()); indice++)
+            for (int indice = 'A'; indice - 'A' < vetor.Length; indice++) // 
             {
-               if(vetor[indice - 'A'] != 0)
-                    posfixa += (indice + 'A'); // + pilha.Desempilhar()
+                if (vetor[indice - 'A'] != 0 && vetor[indice - 'A'] != 64) //vetor[indice- 'A'] != 0
+                    posfixa += Convert.ToChar(indice); // + pilha.Desempilhar()
+                else
+                    if (vetor[indice - 'A'] == '@')
+                    {
+                        posfixa += "@";
+                         
+                    }                         
+                else if(!pilha.EstaVazia())
+                      posfixa += pilha.Desempilhar();                    
             }
 
-            return posfixa;
+            expressaoInfixa = posfixa;
+
+            return expressaoInfixa;
         }
 
         public bool SeEhSinal(char s)
@@ -71,66 +115,6 @@ namespace apCalculadora
 
             return ehsinal;
         }
-
-        //public string ParaPosfixa(string expressaoInfixa)
-        //{
-        //    string posfixa = "";
-        //    string sinal = "";
-        //    string aux = expressaoInfixa;
-
-
-        //    foreach (var a in expressaoInfixa)
-        //    {
-        //        if (a >= '0' && a <= '9')
-        //        {
-        //            if (sinal == "") //se for for 
-        //                posfixa += a;
-        //            else
-        //            {//1 + 12
-
-        //                if(expressaoInfixa.Length - posfixa.Length > 2) //a sequencia nao acabou
-        //                {
-        //                    posfixa += a;
-        //                }                         
-        //                else
-        //                {
-        //                    posfixa += a;
-        //                    while (!pilha.EstaVazia())
-        //                        posfixa += pilha.Desempilhar();
-        //                    sinal = "";
-        //                }                        
-        //            }
-        //        }
-        //        else 
-        //            {
-        //                if (a == '+' || a == '-' || a == '/' || a == '*' || a == '^' || a == ',') //É sinal
-        //                {
-        //                    if (a == ',')
-        //                        posfixa += a + "";
-        //                    else
-        //                    {
-        //                        sinal = a + "";
-
-        //                        if (pilha.EstaVazia())
-        //                            pilha.Empilhar(a + "");
-        //                        else
-        //                        {
-        //                            if (SeTemPreferencia(pilha.OTopo(), a + ""))//Verifica se oq está empilhado tem preferencia
-        //                            {
-        //                                sinal = pilha.Desempilhar();
-        //                            }
-        //                            else
-        //                            {
-        //                                pilha.Empilhar(a + "");
-        //                            }
-        //                        }                                                               
-        //                    }
-        //                }
-        //        }
-        //    }
-        //    return posfixa;
-        //}
-
         public bool SeTemPreferencia(string empilhado, string emComparacao)
         {
             if (empilhado == emComparacao)
@@ -170,50 +154,84 @@ namespace apCalculadora
                 return false;
             }
 
-            return false;//ou n seiii
+            return false;
         }
                
         public string Resolver(string expressao)
         {
             string result = "";
             char sinal = ' ';
-
-            for(int i = 0; i < expressao.Length; i++)
+            double? a, b = null;
+            
+            for(int i = 0; i < vetor.Length && expressao.Length != 0; i++)
             {
-                if(SeEhSinal(expressao[i]))
+                if(vetor[i] != '@' && vetor[i + 1] != '@')
                 {
-                    if (sinal == ' ')
-                    {
-                        sinal = expressao[i];
-                        pilha.Empilhar(expressao[i] + "");
-                    }                        
-                    else //vemos a preferencia
-                    {
-                        if (SeTemPreferencia(pilha.OTopo(), expressao[i] + ""))
-                        {
-                            //resolver
+                    a = vetor[i];
+                    b = vetor[i++];
+                    sinal = '';
+                    if(ResolverUmaParte(a, b, sinal) != null)
 
-                        }
-                        else
-                            pilha.Empilhar(expressao[i] + "");
-                    }
                 }
-                else
-                    while (i != expressao.Length && expressao[i] >= '0' && expressao[i] <= '9') //é número
-                    {
-                        int posicaoInicial = i;
-                        string num = "";
-                        while (i + num.Length < expressao.Length && expressao[i] >= '0' && expressao[i] <= '9')
-                            num += expressao[i++];
-                        
-
-                    }
-
+                  
             }
+
+            //for(int i = 0; i < expressao.Length; i++)
+            //{
+            //    if(SeEhSinal(expressao[i]))
+            //    {
+            //        if (sinal == ' ')
+            //        {
+            //            sinal = expressao[i];
+            //            pilha.Empilhar(expressao[i] + "");
+            //        }                        
+            //        else //vemos a preferencia
+            //        {
+            //            if (SeTemPreferencia(pilha.OTopo(), expressao[i] + ""))
+            //            {
+            //                //resolver
+            //                sinal = Convert.ToChar(pilha.OTopo());
+            //                if (sinal == '*')
+            //                    result = "" + (a * b);
+            //            }
+            //            else
+            //                pilha.Empilhar(expressao[i] + "");
+            //        }
+            //    }
+            //    else
+            //        while (i != expressao.Length && expressao[i] >= '0' && expressao[i] <= '9') //é número
+            //        {
+            //            int posicaoInicial = i;
+            //            string num = "";
+            //            while (i + num.Length < expressao.Length && expressao[i] >= '0' && expressao[i] <= '9')
+            //                num += expressao[i++];
+
+            //            if (a == null)
+            //                a = double.Parse(num);
+            //            else
+            //                b = double.Parse(num);
+            //        }
+
+            //}
 
             return result;
         }
-        
+
+        public string ResolverUmaParte(double? a, double? b, char sinal)
+        {
+            if (a == null || b == null)
+                return null;
+
+            string result = "";
+
+
+
+
+
+            return result;
+        }
+
+       
         public bool VerificarParenteses(string expressao) //usar no form
         {
             PilhaHerdaLista<char> parenteses = new PilhaHerdaLista<char>();

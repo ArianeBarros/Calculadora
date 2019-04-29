@@ -68,10 +68,10 @@ namespace apCalculadora
                        
                 }
             }
-            lbSequencia.Text = pilha.ParaPosfixa(texto);
 
-            pilha.Resolver(texto);            
-            txtResultado.Text = pilha.ToString();         
+            lbSequencia.Text = pilha.ParaPosfixa(texto);
+                       
+            txtResultado.Text = pilha.Resolver(pilha.ParaPosfixa(texto));          
         }        
 
         private void txtVisor_KeyPress(object sender, KeyPressEventArgs e)
