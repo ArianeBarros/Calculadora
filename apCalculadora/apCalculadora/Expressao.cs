@@ -9,30 +9,31 @@ namespace apCalculadora
     public class Expressao
     {
         PilhaHerdaLista<string> pilha;
-                    //  0   1   2   3    4   5   6   7   8  9  10
+        string[] nume;
+        //  0   1   2   3    4   5   6   7   8  9  10
         string[] vetor;
-                    //  A   B   C   D    E   F   G   H   I  J   K
+        //  A   B   C   D    E   F   G   H   I  J   K
         public Expressao()
         {
+            nume = new string[26];
             pilha = new PilhaHerdaLista<string>();
         }
 
-        public string ParaPosfixa(string expressaoInfixa)
+        public string ParaPosfixa(string[] expressaoInfixa, int qtdinfos)
         {
-            string posfixa = "";
+            string[] posfixa = new string[26];
             vetor = new string[26];
             int qtd = 0;
-
             if (!VerificarParenteses(expressaoInfixa))
                 return null;
 
-            for (int i = 0; i < expressaoInfixa.Length; i++)
+            for (int i = 0; i < qtdinfos; i++)
             {
-                if (i < expressaoInfixa.Length && expressaoInfixa[i] >= '0' && expressaoInfixa[i] <= '9') //é número
+                if (i < qtdinfos && expressaoInfixa[i].CompareTo("0") >= 0 && expressaoInfixa[i].CompareTo("9") <= 0) //é número
                 {
                     int posicaoInicial = i;
                     string num = "";
-                    while (i + num.Length < expressaoInfixa.Length && expressaoInfixa[i] >= '0' && expressaoInfixa[i] <= '9')
+                    while (i + num.Length < qtdinfos && expressaoInfixa[i].CompareTo("0") >= 0 && expressaoInfixa[i].CompareTo("9") <= 0)
                         num += expressaoInfixa[i++];
 
                     vetor[qtd] = num;
@@ -40,44 +41,49 @@ namespace apCalculadora
                     i = posicaoInicial + num.Length - 1;
                 }
                 else
-                ,{
-                    if (pilha.EstaVazia())
-                        pilha.Empilhar(expressaoInfixa[i]+"");
-                    else
-                    { 
-                        while(!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), expressaoInfixa[i] + ""))
-                        {
-                            vetor[qtd] = pilha.Desempilhar();
-                            qtd++;
-                        }
-                        pilha.Empilhar(expressaoInfixa[i] + "");
+                {
+                    while (!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), expressaoInfixa[i] + ""))
+                    {
+                        vetor[qtd] = pilha.Desempilhar();
+                        qtd++;
                     }
+                    pilha.Empilhar(expressaoInfixa[i] + ""); // +* -
                 }
 
             }
-            for(int l = qtd; !pilha.EstaVazia(); l++)
+            for (int l = qtd; !pilha.EstaVazia(); l++)
             {
-               vetor[l] = pilha.Desempilhar();
+                vetor[l] = pilha.Desempilhar();
                 qtd++;
             }
-
-            for (int indice = 'A'; indice - 'A' < vetor.Length; indice++) // 
+            int k = 0;
+            int w = 0; //contador pra o vetor de números
+            for (int indice = 'A'; indice - 'A' < qtdinfos; indice++)
             {
-
-                if (vetor[indice - 'A'] != null) //vetor[indice- 'A'] != 0
+                if (vetor[indice - 'A'] != null)
                 {
-                    if(SeEhSinal(Convert.ToChar(vetor[indice - 'A'])))
-                        posfixa += vetor[indice - 'A'];
+                    if (SeEhSinal(Convert.ToChar(vetor[indice - 'A'])))
+                        posfixa[k] += vetor[indice - 'A'];
                     else
-                        posfixa += Convert.ToChar(indice);
+                    {
+
+                        nume[w] = posfixa[k];
+                        w++;
+                        posfixa[k] += Convert.ToChar(indice);
+                    }
+
+                    k++;
 
                 }
-                   
+
             }
-
+            string a = "";
             expressaoInfixa = posfixa;
-
-            return expressaoInfixa;
+            for (int l = 0; l < qtd; l++)
+            {
+                a += expressaoInfixa[l];
+            }
+            return a;
         }
 
         public bool SeEhSinal(char s)
@@ -130,14 +136,29 @@ namespace apCalculadora
 
             return false;
         }
-               
-        public string Resolver(string expressao)
-        {
-            string result = "";
-            char sinal = ' ';
-            double? a, b = null;
-            
 
+        public void Resolver(string expressaoPosfixa)
+        {
+            string posfixa = expressaoPosfixa;
+            PilhaHerdaLista<string> p = new PilhaHerdaLista<string>();
+            double resultado = 0;
+            int k = 0;
+
+            for (int i = 0; i < posfixa.Length; i++)
+            {
+                if (!SeEhSinal(posfixa[i]))
+                {
+                    p.Empilhar(nume[k]);
+                    k++;
+                }
+                else
+                {
+
+                }
+            }
+            //string result = "";
+            //char sinal = ' ';
+            //double? a, b = null;
 
             //for(int i = 0; i < expressao.Length; i++)
             //{
@@ -194,29 +215,29 @@ namespace apCalculadora
             return result;
         }
 
-       
-        public bool VerificarParenteses(string expressao) //usar no form
+
+        public bool VerificarParenteses(string[] expressao) //usar no form
         {
-            PilhaHerdaLista<char> parenteses = new PilhaHerdaLista<char>();
+            PilhaHerdaLista<string> parenteses = new PilhaHerdaLista<string>();
 
             foreach (var a in expressao)
-                if (a == '(')
+                if (a == "(")
                     parenteses.Empilhar(a);
-                else if (a == ')')
+                else if (a == ")")
                 {
                     try
                     {
                         parenteses.Desempilhar();
                     }
-                    catch(Exception)
+                    catch (Exception)
                     {
                         return false;
-                    } 
+                    }
                 }
             if (!parenteses.EstaVazia())
                 return false;
 
-            return true; 
+            return true;
         }
     }
 }

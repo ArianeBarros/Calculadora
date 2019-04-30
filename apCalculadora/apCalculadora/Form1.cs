@@ -42,15 +42,21 @@ namespace apCalculadora
         }
 
         private void btnIgual_Click(object sender, EventArgs e)
-        { 
-            string texto = txtVisor.Text;
+        {
+            string[] texto = new string[26];
+            int qtd = 0;
+            for(int k = 0; k < txtVisor.Text.Length; k++)
+            {
+                texto[k] = txtVisor.Text.Substring(k, 1);
+                qtd++;
+            }
             string[] vetor = new string[txtVisor.Text.Length];
             
-            for (int i = 0; i < texto.Length; i++)
+            for (int i = 0; i < qtd; i++)
             {            
-                if (texto[i] >= '0' && texto[i] <= '9') //Se o caractere atual for número
+                if (texto[i].Equals("0") && texto[i].Equals("9")) //Se o caractere atual for número
                 {
-                    if (i != 0 && texto[i - 1] >= '0' && texto[i - 1] <= '9')
+                    if (i != 0 && texto[i - 1].Equals("0") && texto[i - 1].Equals("9"))
                     {//Se o dado anterior também for um número
                         vetor[i] = texto[i] + texto[i - 1] + "";
                     }
@@ -59,7 +65,7 @@ namespace apCalculadora
                 }
                 else
                 {
-                    if (texto[i] >= 'A' && texto[i] <= 'Z')  //Se o caractere atual for letra
+                    if (texto[i].Equals("A") && texto[i].Equals("Z"))  //Se o caractere atual for letra
                         MessageBox.Show("Erro");
                     else //É um sinal
                     {
@@ -69,9 +75,11 @@ namespace apCalculadora
                 }
             }
 
-            lbSequencia.Text = pilha.ParaPosfixa(texto);
+            //lbSequencia.Text = 
+
+            lbSequencia.Text = pilha.ParaPosfixa(texto, qtd);
                        
-            txtResultado.Text = pilha.Resolver(pilha.ParaPosfixa(texto));          
+            //txtResultado.Text = pilha.Resolver(pilha.ParaPosfixa(texto));          
         }        
 
         private void txtVisor_KeyPress(object sender, KeyPressEventArgs e)
