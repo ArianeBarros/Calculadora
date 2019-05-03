@@ -76,10 +76,21 @@ namespace apCalculadora
             }
 
             //lbSequencia.Text = 
+            lbPosfixa.Visible = true;
+            string posfixa = pilha.ParaPosfixa(texto, qtd);
 
-            lbSequencia.Text = pilha.ParaPosfixa(texto, qtd);
-                       
-            //txtResultado.Text = pilha.Resolver(pilha.ParaPosfixa(texto));          
+            if (posfixa == null)
+            {
+                MessageBox.Show("Verifique se a sequência está correta.", "Erro!");
+                txtVisor.Clear();
+            }
+               
+            else
+                lbPosfixa.Text = posfixa;
+
+            lbInfixa.Visible = true;
+            lbInfixa.Text = pilha.ParaInfixa(texto, qtd);
+            txtResultado.Text = pilha.Resolver(posfixa);          
         }        
 
         private void txtVisor_KeyPress(object sender, KeyPressEventArgs e)
