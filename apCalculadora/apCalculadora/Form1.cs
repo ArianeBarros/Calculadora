@@ -77,7 +77,7 @@ namespace apCalculadora
 
             //lbSequencia.Text = 
             lbPosfixa.Visible = true;
-            string posfixa = pilha.ParaPosfixa(texto, qtd);
+            string posfixa = pilha.ParaPosfixa(txtVisor.Text);
 
             if (posfixa == null)
             {
@@ -90,7 +90,7 @@ namespace apCalculadora
 
             lbInfixa.Visible = true;
             lbInfixa.Text = pilha.ParaInfixa(texto, qtd);
-            txtResultado.Text = pilha.Resolver(posfixa);          
+          //  txtResultado.Text = pilha.Resolver(posfixa);          
         }        
 
         private void txtVisor_KeyPress(object sender, KeyPressEventArgs e)

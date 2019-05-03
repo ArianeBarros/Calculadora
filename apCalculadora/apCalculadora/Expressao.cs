@@ -9,32 +9,38 @@ namespace apCalculadora
     public class Expressao
     {
         PilhaHerdaLista<string> pilha;
-        string[] nume;
+        string[] infixa;
         //  0   1   2   3    4   5   6   7   8  9  10
         string[] vetor;
         //  A   B   C   D    E   F   G   H   I  J   K
         public Expressao()
         {
-            nume = new string[26];
+            infixa = new string[26];
             pilha = new PilhaHerdaLista<string>();
         }
 
-        public string ParaPosfixa(string[] expressaoInfixa, int qtdinfos)
+        public string ParaPosfixa(string expressaoInfixa)
         {
-            string[] posfixa = new string[26];
+            string posfixa = "";
             vetor = new string[26];
             int qtd = 0;
 
             if (!VerificarParenteses(expressaoInfixa))
                 return null;
 
-            for (int i = 0; i < qtdinfos; i++)
+            if (expressaoInfixa[0] == '-')
             {
-                if (i < qtdinfos && expressaoInfixa[i].CompareTo("0") >= 0 && expressaoInfixa[i].CompareTo("9") <= 0) //é número
+                vetor[qtd] = "@";
+                qtd++;
+            }
+
+            for (int i = 0; i < expressaoInfixa.Length; i++)
+            {
+                if (!SeEhSinal(expressaoInfixa[i])) //é número
                 {
                     int posicaoInicial = i;
                     string num = "";
-                    while (i + num.Length < qtdinfos && expressaoInfixa[i].CompareTo("0") >= 0 && expressaoInfixa[i].CompareTo("9") <= 0)
+                    while (i + num.Length < expressaoInfixa.Length && !SeEhSinal(expressaoInfixa[i]))
                         num += expressaoInfixa[i++];
 
                     vetor[qtd] = num;
@@ -42,13 +48,13 @@ namespace apCalculadora
                     i = posicaoInicial + num.Length - 1;
                 }
                 else
-                {
+                {                    
                     while (!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), expressaoInfixa[i] + ""))
                     {
                         vetor[qtd] = pilha.Desempilhar();
                         qtd++;
                     }
-                    pilha.Empilhar(expressaoInfixa[i] + ""); // +* -
+                    pilha.Empilhar(expressaoInfixa[i] + "");
                 }
 
             }
@@ -57,34 +63,89 @@ namespace apCalculadora
                 vetor[l] = pilha.Desempilhar();
                 qtd++;
             }
-            int k = 0;
-            int w = 0; //contador pra o vetor de números
-            for (int indice = 'A'; indice - 'A' < qtdinfos; indice++)
+
+            for (int indice = 'A'; indice - 'A' < qtd; indice++)
             {
-                if (vetor[indice - 'A'] != null)
-                {
-                    if (SeEhSinal(Convert.ToChar(vetor[indice - 'A'])))
-                        posfixa[k] += vetor[indice - 'A'];
+                //if (vetor[indice - 'A'] != null)
+                //{
+                    if (SeEhSinal(Convert.ToChar(vetor[indice - 'A'])) || vetor[indice -'A'] == "@")
+                        posfixa += vetor[indice - 'A'];
                     else
-                    {
-
-                        nume[w] = posfixa[k];
-                        w++;
-                        posfixa[k] += Convert.ToChar(indice);
-                    }
-
-                    k++;
-
-                }
-
+                        posfixa+= Convert.ToChar(indice);
+               // }
             }
-            string a = "";
-            expressaoInfixa = posfixa;
-            for (int l = 0; l < qtd; l++)
-            {
-                a += expressaoInfixa[l];
-            }
-            return a;
+            //string a = "";
+            //expressaoInfixa = posfixa;
+            //for (int l = 0; l < qtd; l++)
+            //{
+            //    a += expressaoInfixa[l];
+            //}
+            return posfixa;
+
+            //string[] posfixa = new string[26];
+            //vetor = new string[26];
+            //int qtd = 0;
+
+            //if (!VerificarParenteses(expressaoInfixa))
+            //    return null;
+
+            //for (int i = 0; i < qtdinfos; i++)
+            //{
+            //    if (i < qtdinfos && expressaoInfixa[i].CompareTo("0") >= 0 && expressaoInfixa[i].CompareTo("9") <= 0) //é número
+            //    {
+            //        int posicaoInicial = i;
+            //        string num = "";
+            //        while (i + num.Length < qtdinfos && expressaoInfixa[i].CompareTo("0") >= 0 && expressaoInfixa[i].CompareTo("9") <= 0)
+            //            num += expressaoInfixa[i++];
+
+            //        vetor[qtd] = num;
+            //        qtd++;
+            //        i = posicaoInicial + num.Length - 1;
+            //    }
+            //    else
+            //    {
+            //        while (!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), expressaoInfixa[i] + ""))
+            //        {
+            //            vetor[qtd] = pilha.Desempilhar();
+            //            qtd++;
+            //        }
+            //        pilha.Empilhar(expressaoInfixa[i] + ""); // +* -
+            //    }
+
+            //}
+            //for (int l = qtd; !pilha.EstaVazia(); l++)
+            //{
+            //    vetor[l] = pilha.Desempilhar();
+            //    qtd++;
+            //}
+            //int k = 0;
+            //int w = 0; //contador pra o vetor de números
+            //for (int indice = 'A'; indice - 'A' < qtdinfos; indice++)
+            //{
+            //    if (vetor[indice - 'A'] != null)
+            //    {
+            //        if (SeEhSinal(Convert.ToChar(vetor[indice - 'A'])))
+            //            posfixa[k] += vetor[indice - 'A'];
+            //        else
+            //        {
+
+            //            nume[w] = posfixa[k];
+            //            w++;
+            //            posfixa[k] += Convert.ToChar(indice);
+            //        }
+
+            //        k++;
+
+            //    }
+
+            //}
+            //string a = "";
+            //expressaoInfixa = posfixa;
+            //for (int l = 0; l < qtd; l++)
+            //{
+            //    a += expressaoInfixa[l];
+            //}
+            //return a;
         }
 
         public string ParaInfixa(string[] expressaoInfixa, int qtdinfos)
@@ -158,33 +219,33 @@ namespace apCalculadora
             return false;
         }
 
-        public string Resolver(string expressaoPosfixa)
-        {
-            string posfixa = expressaoPosfixa;
-            PilhaHerdaLista<string> p = new PilhaHerdaLista<string>();
-            double resultado = 0;
-            int k = 0;
+        //public string Resolver(string expressaoPosfixa)
+        //{
+        //    string posfixa = expressaoPosfixa;
+        //    PilhaHerdaLista<string> p = new PilhaHerdaLista<string>();
+        //    double resultado = 0;
+        //    int k = 0;
 
-            for (int i = 0; i < posfixa.Length; i++)
-            {
-                if (!SeEhSinal(posfixa[i]))
-                {
-                    if (posfixa[i] == '@')
-                        p.Empilhar((double.Parse(p.Desempilhar()) * -1).ToString());
-                    else
-                        p.Empilhar(nume[k]);
-                    k++;
-                }
-                else
-                {
-                    double operando1 = double.Parse(p.Desempilhar());
-                    double operando2 = double.Parse(p.Desempilhar());
+        //    for (int i = 0; i < posfixa.Length; i++)
+        //    {
+        //        if (!SeEhSinal(posfixa[i]))
+        //        {
+        //            if (posfixa[i] == '@')
+        //                p.Empilhar((double.Parse(p.Desempilhar()) * -1).ToString());
+        //            else
+        //                p.Empilhar(nume[k]);
+        //            k++;
+        //        }
+        //        else
+        //        {
+        //            double operando1 = double.Parse(p.Desempilhar());
+        //            double operando2 = double.Parse(p.Desempilhar());
 
-                    p.Empilhar(SubExpressao(operando1, operando2, posfixa[i]));
-                }
-            }
-            return p.Desempilhar();
-        }
+        //            p.Empilhar(SubExpressao(operando1, operando2, posfixa[i]));
+        //        }
+        //    }
+        //    return p.Desempilhar();
+        //}
 
         public string SubExpressao(double op1, double op2, char sinal)
         {
@@ -253,14 +314,14 @@ namespace apCalculadora
         }
 
 
-        public bool VerificarParenteses(string[] expressao) //usar no form
+        public bool VerificarParenteses(string expressao) //usar no form
         {
             PilhaHerdaLista<string> parenteses = new PilhaHerdaLista<string>();
 
             foreach (var a in expressao)
-                if (a == "(")
-                    parenteses.Empilhar(a);
-                else if (a == ")")
+                if (a == '(')
+                    parenteses.Empilhar(a + "");
+                else if (a == ')')
                 {
                     try
                     {
