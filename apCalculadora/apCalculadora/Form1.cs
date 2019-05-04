@@ -89,8 +89,8 @@ namespace apCalculadora
                 lbPosfixa.Text = posfixa;
 
             lbInfixa.Visible = true;
-            lbInfixa.Text = pilha.ParaInfixa(texto, qtd);
-          //  txtResultado.Text = pilha.Resolver(posfixa);          
+            lbInfixa.Text = pilha.ParaInfixa(txtVisor.Text);
+            txtResultado.Text = pilha.Resolver(txtVisor.Text);          
         }        
 
         private void txtVisor_KeyPress(object sender, KeyPressEventArgs e)
