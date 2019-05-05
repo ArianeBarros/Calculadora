@@ -36,11 +36,11 @@ namespace apCalculadora
 
             for (int i = 0; i < expressaoInfixa.Length; i++)
             {
-                if (!SeEhSinal(expressaoInfixa[i])) //é número
+                if (!SeEhSinal(expressaoInfixa[i] + "")) //é número
                 {
                     int posicaoInicial = i;
                     string num = "";
-                    while (i + num.Length < expressaoInfixa.Length && !SeEhSinal(expressaoInfixa[i]))
+                    while (i + num.Length < expressaoInfixa.Length && !SeEhSinal(expressaoInfixa[i] + ""))
                         num += expressaoInfixa[i++];
 
                     vetor[qtd] = num;
@@ -65,86 +65,13 @@ namespace apCalculadora
 
             for (int indice = 'A'; indice - 'A' < qtd; indice++)
             {
-                //if (vetor[indice - 'A'] != null)
-                //{
-                    if (SeEhSinal(Convert.ToChar(vetor[indice - 'A'])) || vetor[indice -'A'] == "@")
-                        posfixa += vetor[indice - 'A'];
-                    else
-                        posfixa+= Convert.ToChar(indice);
-               // }
+                if (SeEhSinal(vetor[indice - 'A']) || vetor[indice -'A'] == "@")
+                    posfixa += vetor[indice - 'A'];
+                else
+                    posfixa+= Convert.ToChar(indice);
             }
-            //string a = "";
-            //expressaoInfixa = posfixa;
-            //for (int l = 0; l < qtd; l++)
-            //{
-            //    a += expressaoInfixa[l];
-            //}
+            
             return posfixa;
-
-            //string[] posfixa = new string[26];
-            //vetor = new string[26];
-            //int qtd = 0;
-
-            //if (!VerificarParenteses(expressaoInfixa))
-            //    return null;
-
-            //for (int i = 0; i < qtdinfos; i++)
-            //{
-            //    if (i < qtdinfos && expressaoInfixa[i].CompareTo("0") >= 0 && expressaoInfixa[i].CompareTo("9") <= 0) //é número
-            //    {
-            //        int posicaoInicial = i;
-            //        string num = "";
-            //        while (i + num.Length < qtdinfos && expressaoInfixa[i].CompareTo("0") >= 0 && expressaoInfixa[i].CompareTo("9") <= 0)
-            //            num += expressaoInfixa[i++];
-
-            //        vetor[qtd] = num;
-            //        qtd++;
-            //        i = posicaoInicial + num.Length - 1;
-            //    }
-            //    else
-            //    {
-            //        while (!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), expressaoInfixa[i] + ""))
-            //        {
-            //            vetor[qtd] = pilha.Desempilhar();
-            //            qtd++;
-            //        }
-            //        pilha.Empilhar(expressaoInfixa[i] + ""); // +* -
-            //    }
-
-            //}
-            //for (int l = qtd; !pilha.EstaVazia(); l++)
-            //{
-            //    vetor[l] = pilha.Desempilhar();
-            //    qtd++;
-            //}
-            //int k = 0;
-            //int w = 0; //contador pra o vetor de números
-            //for (int indice = 'A'; indice - 'A' < qtdinfos; indice++)
-            //{
-            //    if (vetor[indice - 'A'] != null)
-            //    {
-            //        if (SeEhSinal(Convert.ToChar(vetor[indice - 'A'])))
-            //            posfixa[k] += vetor[indice - 'A'];
-            //        else
-            //        {
-
-            //            nume[w] = posfixa[k];
-            //            w++;
-            //            posfixa[k] += Convert.ToChar(indice);
-            //        }
-
-            //        k++;
-
-            //    }
-
-            //}
-            //string a = "";
-            //expressaoInfixa = posfixa;
-            //for (int l = 0; l < qtd; l++)
-            //{
-            //    a += expressaoInfixa[l];
-            //}
-            //return a;
         }
 
         public string ParaInfixa(string expressaoInfixa)
@@ -161,11 +88,11 @@ namespace apCalculadora
 
             for (int i = a; i < expressaoInfixa.Length; i++)
             {
-                if (!SeEhSinal(expressaoInfixa[i])) //é número
+                if (!SeEhSinal(expressaoInfixa[i] + "")) //é número
                 {
                     int posicaoInicial = i;
                     string num = "";
-                    while (i + num.Length < expressaoInfixa.Length && !SeEhSinal(expressaoInfixa[i]))
+                    while (i + num.Length < expressaoInfixa.Length && !SeEhSinal(expressaoInfixa[i] + ""))
                         num += expressaoInfixa[i++];
 
                     vetInfixo[qtd] = num;
@@ -181,44 +108,21 @@ namespace apCalculadora
 
             for (int indice = 'A'; indice - 'A' < qtd; indice++)
             {
-                if (SeEhSinal(Convert.ToChar(vetInfixo[indice - 'A'])))
+                if (SeEhSinal(vetInfixo[indice - 'A']))
                     infixa += vetInfixo[indice - 'A'];
                 else
                     infixa += Convert.ToChar(indice);
-            }
+            }            
 
             return infixa;
         }
+        
 
-        //public string ParaInfixa(string[] expressaoInfixa, int qtdinfos)
-        //{
-        //    string[] infixa = new string[26];
-        //    int k = 0;
-
-        //    for (int indice = 'A'; indice - 'A' < qtdinfos; indice++)
-        //    {
-        //        if (vetor[indice - 'A'] != null)
-        //        {
-        //            infixa[k] += vetor[indice - 'A'];
-        //            infixa[k] += Convert.ToChar(indice);
-
-        //            k++;
-        //        }
-        //    }
-        //    string a = "";
-        //    expressaoInfixa = infixa;
-        //    for (int l = 0; l < qtdinfos; l++)
-        //    {
-        //        a += expressaoInfixa[l];
-        //    }
-        //    return a;
-        //}
-
-        public bool SeEhSinal(char s)
-        {
+        public bool SeEhSinal(string s)
+            {
             bool ehsinal = false;
 
-            if (s == '+' || s == '-' || s == '/' || s == '*' || s == '^')
+            if (s == "+" || s == "-" || s == "/" || s == "*" || s == "^")
                 ehsinal = true;
 
             return ehsinal;
@@ -272,12 +176,12 @@ namespace apCalculadora
 
             for (int indice = 'A'; indice - 'A' < expressao.Length; indice++)
             {
-                if (SeEhSinal(Convert.ToChar(vetInfixo[indice - 'A'])))
+                if (SeEhSinal(vetInfixo[indice - 'A']))
                 {
                     while(!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), vetInfixo[indice - 'A']))
                     {
-                        double a = double.Parse(pilhaResult.Desempilhar());
                         double b = double.Parse(pilhaResult.Desempilhar());
+                        double a = double.Parse(pilhaResult.Desempilhar());
                         string sinal = pilha.Desempilhar();
 
                         pilhaResult.Empilhar(ResolverOperacao(a,b,sinal));
@@ -285,7 +189,26 @@ namespace apCalculadora
                     pilha.Empilhar(vetInfixo[indice - 'A']);
                 }
                 else
-                    pilhaResult.Empilhar(vetInfixo[indice - 'A']);
+                {
+                    int posicaoInicial = indice;
+                    string num = "";
+                    while (indice - 'A' + num.Length <= expressao.Length && !SeEhSinal(expressao[indice - 'A'] + ""))
+                        num += expressao[(indice++) - 'A'];
+                    
+                    indice = posicaoInicial + num.Length - 1;
+
+                    pilhaResult.Empilhar(num);
+                }
+                   
+            }
+
+            while(!pilha.EstaVazia())
+            {
+                double b = double.Parse(pilhaResult.Desempilhar());
+                double a = double.Parse(pilhaResult.Desempilhar());
+                string sinal = pilha.Desempilhar();
+
+                pilhaResult.Empilhar(ResolverOperacao(a, b, sinal));
             }
             
             return pilhaResult.Desempilhar();
@@ -293,9 +216,24 @@ namespace apCalculadora
 
         public string ResolverOperacao(double a, double b, string s)
         {
-            string result = "";
+            double? r = null;
 
-            return result;
+            if (s == "+")
+                r = a + b;
+            else
+                if (s == "-")
+                r = a - b;
+            else
+               if (s == "*")
+                r = a * b;
+            else
+                if (s == "/")
+                r = a / b;
+            else
+                if (s == "^")
+                r = Math.Pow(a, b);
+
+            return r.ToString();
         }
 
         //public string Resolver(string expressaoPosfixa)

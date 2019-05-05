@@ -32,6 +32,9 @@ namespace apCalculadora
             else if ((((Button)sender).Text) == "C")
             {
                 txtVisor.Clear();
+                txtResultado.Clear();
+                lbInfixa.Text = "";
+                lbPosfixa.Text = "";
             }
 
             else
@@ -95,7 +98,7 @@ namespace apCalculadora
 
         private void txtVisor_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!(Char.IsNumber(e.KeyChar)) && !pilha.SeEhSinal(Convert.ToChar(e.KeyChar)))
+            if (!(Char.IsNumber(e.KeyChar)) && !pilha.SeEhSinal((e.KeyChar).ToString()))
                 e.Handled = true;
         }
 
