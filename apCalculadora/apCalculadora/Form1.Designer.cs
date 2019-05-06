@@ -315,9 +315,8 @@
             this.lbInfixa.AutoSize = true;
             this.lbInfixa.Location = new System.Drawing.Point(99, 129);
             this.lbInfixa.Name = "lbInfixa";
-            this.lbInfixa.Size = new System.Drawing.Size(69, 23);
+            this.lbInfixa.Size = new System.Drawing.Size(0, 23);
             this.lbInfixa.TabIndex = 28;
-            this.lbInfixa.Text = "label2";
             this.lbInfixa.Visible = false;
             // 
             // FrmCalculadora

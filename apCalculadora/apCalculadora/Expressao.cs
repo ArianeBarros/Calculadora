@@ -122,7 +122,7 @@ namespace apCalculadora
             {
             bool ehsinal = false;
 
-            if (s == "+" || s == "-" || s == "/" || s == "*" || s == "^")
+            if (s == "+" || s == "-" || s == "/" || s == "*" || s == "^" || s == "(" || s == ")")
                 ehsinal = true;
 
             return ehsinal;
@@ -176,19 +176,19 @@ namespace apCalculadora
 
             for (int indice = 'A'; indice - 'A' < expressao.Length; indice++)
             {
-                if (SeEhSinal(vetInfixo[indice - 'A']))
+                if (SeEhSinal(expressao[indice - 'A'] + ""))
                 {
-                    while(!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), vetInfixo[indice - 'A']))
+                    while(!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), expressao[indice - 'A'] + ""))
                     {
                         double b = double.Parse(pilhaResult.Desempilhar());
                         double a = double.Parse(pilhaResult.Desempilhar());
                         string sinal = pilha.Desempilhar();
 
-                        pilhaResult.Empilhar(ResolverOperacao(a,b,sinal));
+                        pilhaResult.Empilhar(SubExpressao(a,b,Convert.ToChar(sinal)));
                     }
-                    pilha.Empilhar(vetInfixo[indice - 'A']);
+                    pilha.Empilhar(expressao[indice - 'A'] + "");
                 }
-                else
+                else                    
                 {
                     int posicaoInicial = indice;
                     string num = "";
@@ -198,8 +198,7 @@ namespace apCalculadora
                     indice = posicaoInicial + num.Length - 1;
 
                     pilhaResult.Empilhar(num);
-                }
-                   
+                }                   
             }
 
             while(!pilha.EstaVazia())
@@ -208,33 +207,33 @@ namespace apCalculadora
                 double a = double.Parse(pilhaResult.Desempilhar());
                 string sinal = pilha.Desempilhar();
 
-                pilhaResult.Empilhar(ResolverOperacao(a, b, sinal));
+                pilhaResult.Empilhar(SubExpressao(a, b,Convert.ToChar(sinal)));
             }
             
             return pilhaResult.Desempilhar();
         }
 
-        public string ResolverOperacao(double a, double b, string s)
-        {
-            double? r = null;
+        //public string ResolverOperacao(double a, double b, string s)
+        //{
+        //    double? r = null;
 
-            if (s == "+")
-                r = a + b;
-            else
-                if (s == "-")
-                r = a - b;
-            else
-               if (s == "*")
-                r = a * b;
-            else
-                if (s == "/")
-                r = a / b;
-            else
-                if (s == "^")
-                r = Math.Pow(a, b);
+        //    if (s == "+")
+        //        r = a + b;
+        //    else
+        //        if (s == "-")
+        //        r = a - b;
+        //    else
+        //       if (s == "*")
+        //        r = a * b;
+        //    else
+        //        if (s == "/")
+        //        r = a / b;
+        //    else
+        //        if (s == "^")
+        //        r = Math.Pow(a, b);
 
-            return r.ToString();
-        }
+        //    return r.ToString();
+        //}
 
         //public string Resolver(string expressaoPosfixa)
         //{
@@ -321,14 +320,14 @@ namespace apCalculadora
         // return result;
 
 
-        public string ResolverUmaParte(double? a, double? b, char sinal)
-        {
-            if (a == null || b == null)
-                return null;
+        //public string ResolverUmaParte(double? a, double? b, char sinal)
+        //{
+        //    if (a == null || b == null)
+        //        return null;
 
-            string result = "";
-            return result;
-        }
+        //    string result = "";
+        //    return result;
+        //}
 
 
         public bool VerificarParenteses(string expressao) //usar no form
