@@ -54,7 +54,7 @@ namespace apCalculadora
             //    qtd++;
             //}
             //string[] vetor = new string[txtVisor.Text.Length];
-            
+
             //for (int i = 0; i < qtd; i++)
             //{            
             //    if (texto[i].Equals("0") && texto[i].Equals("9")) //Se o caractere atual for número
@@ -74,23 +74,25 @@ namespace apCalculadora
             //        {
             //            vetor[i] = texto[i] + "";
             //        }
-                       
+
             //    }
             //}
-            
-            lbPosfixa.Visible = true;
-            string posfixa = pilha.ParaPosfixa(txtVisor.Text);
 
-            if (posfixa == null)
+            lbInfixa.Visible = true;
+            
+            string infixa = pilha.ParaInfixa(txtVisor.Text);
+            
+
+            if (infixa == null)
             {
                 MessageBox.Show("Verifique se a sequência está correta.", "Erro!");
                 txtVisor.Clear();
             }               
             else
             {
-                lbPosfixa.Text = posfixa;
-                lbInfixa.Visible = true;
-                lbInfixa.Text = pilha.ParaInfixa(txtVisor.Text);
+                lbInfixa.Text = infixa;
+                lbPosfixa.Visible = true;
+                lbPosfixa.Text = pilha.ParaPosfixa(txtVisor.Text);
                 txtResultado.Text = pilha.Resolver(txtVisor.Text);
             }                        
         }        
