@@ -18,43 +18,90 @@ namespace apCalculadora
         public Expressao()
         {
             vetInfixo = new string[26];
+            vetorPosfixo = new string[26];
             pilha = new PilhaHerdaLista<string>();
         }
 
         public string ParaPosfixa(string expressaoInfixa)
         {
             string posfixa = "";
+            int a = 0;
 
             if (!VerificarParenteses(expressaoInfixa))
                 return null;
 
+            if (expressaoInfixa[0] == '-')
+            {
+                posfixa += "@";
+                vetorPosfixo[a] = "@";
+                a++;
+            }
+
             char letra = 'A';
 
-            for (int indice = 0; indice < qtd; indice++)
+            for (int indice = a; indice < qtd; indice++)
             {
-                if (SeEhSinal(vetInfixo[indice]) || vetInfixo[indice] == "@")
+                if (SeEhSinal(vetInfixo[indice]))
                 {
-                    while(!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), vetInfixo[indice]))
+                    while (!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), vetInfixo[indice]))
                     {
-                        posfixa += pilha.Desempilhar();
+                        var aux = pilha.Desempilhar();
+                        if (vetInfixo[indice] != ")" && vetInfixo[indice] != "(")
+                            posfixa += aux;
+                        vetorPosfixo[indice] = aux;
                     }
-                    pilha.Empilhar(vetInfixo[indice]);                    
-                }                  
+                    pilha.Empilhar(vetInfixo[indice]);
+                }
                 else
                 {
                     posfixa += letra;
                     letra++;
+                    vetorPosfixo[indice] = vetInfixo[indice];                                    
                 }
-                  
             }
 
             for (int l = qtd; !pilha.EstaVazia(); l++)
             {
-                posfixa += pilha.Desempilhar();
+                var aux = pilha.Desempilhar();
+                posfixa += aux;
+                vetorPosfixo[l] = aux;
             }
 
             return posfixa;
+
+            //string posfixa = "";
+
+            //if (!VerificarParenteses(expressaoInfixa))
+            //    return null;
+
+            //char letra = 'A';
+
+            //for (int indice = 0; indice < qtd; indice++)
+            //{
+            //    if (SeEhSinal(vetInfixo[indice]) || vetInfixo[indice] == "@")
+            //    {
+            //        while(!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), vetInfixo[indice]))
+            //        {
+            //            posfixa += pilha.Desempilhar();
+            //        }
+            //        pilha.Empilhar(vetInfixo[indice]);                    
+            //    }                  
+            //    else
+            //    {
+            //        posfixa += letra;
+            //        letra++;
+            //    }
+
+            //}
+
+            //for (int l = qtd; !pilha.EstaVazia(); l++)
+            //{
+            //    posfixa += pilha.Desempilhar();
+            //}
+
+            //return posfixa;
         }
+
 
         public string ParaInfixa(string expressaoInfixa)
         {
@@ -65,7 +112,12 @@ namespace apCalculadora
             {
                 vetInfixo[qtd] = "@";
                 qtd++;
-            }                
+            }
+            else
+                if (expressaoInfixa[0] == '+')
+            {
+                //faz alguma coisa
+            }
 
             for (int i = qtd; i < expressaoInfixa.Length; i++)
             {
@@ -91,7 +143,10 @@ namespace apCalculadora
             for (int indice = 0; indice  < qtd; indice++)
             {
                 if (SeEhSinal(vetInfixo[indice]))
-                    infixa += vetInfixo[indice];
+                {
+                    if(vetInfixo[indice] != ")" && vetInfixo[indice] != "(")
+                      infixa += vetInfixo[indice];
+                }                    
                 else
                 {
                     infixa += letra;
@@ -108,7 +163,7 @@ namespace apCalculadora
             {
             bool ehsinal = false;
 
-            if (s == "+" || s == "-" || s == "/" || s == "*" || s == "^" || s == "(" || s == ")")
+            if (s == "+" || s == "-" || s == "/" || s == "*" || s == "^" || s == "(" || s == ")" || s == "@")
                 ehsinal = true;
 
             return ehsinal;
@@ -150,8 +205,34 @@ namespace apCalculadora
                     return true;
                 return false;
             }
-            return false;
+            return true;
         }
+
+        //public string Resolver(st)
+        //{
+        //    PilhaHerdaLista<string> pilhaResult = new PilhaHerdaLista<string>();
+
+        //    for (int indice = 0; indice < qtd; indice++)
+        //    {
+        //        if (SeEhSinal(vetInfixo[indice] + ""))
+        //        {
+        //            while (!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), vetInfixo[indice] + ""))
+        //            {
+        //                double b = double.Parse(pilhaResult.Desempilhar());
+        //                double a = double.Parse(pilhaResult.Desempilhar());
+        //                string sinal = pilha.Desempilhar();
+
+        //                pilhaResult.Empilhar(SubExpressao(a, b, Convert.ToChar(sinal)));
+        //            }
+        //            pilha.Empilhar(vetInfixo[indice] + "");
+        //        }
+        //        else
+        //        {
+        //            pilhaResult.Empilhar(vetInfixo[indice]);
+        //        }
+        //    }
+        //    return pilhaResult.Desempilhar();
+        //}
 
         public string Resolver(string expressao)
         {
@@ -160,35 +241,61 @@ namespace apCalculadora
             if (!VerificarParenteses(expressao))
                 return null;
 
-            for (int indice = 0; indice  < qtd; indice++)
+            for (int indice = 0; indice < qtd; indice++)
             {
                 if (SeEhSinal(vetInfixo[indice] + ""))
                 {
-                    while(!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), vetInfixo[indice] + ""))
+                    while (!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), vetInfixo[indice] + ""))
                     {
-                        double b = double.Parse(pilhaResult.Desempilhar());
-                        double a = double.Parse(pilhaResult.Desempilhar());
                         string sinal = pilha.Desempilhar();
-
-                        pilhaResult.Empilhar(SubExpressao(a,b,Convert.ToChar(sinal)));
+                        double b = double.Parse(pilhaResult.Desempilhar());
+                        
+                        if (sinal != "@")
+                        {
+                            if (sinal != ")" && sinal != "(")
+                            {
+                                double a = double.Parse(pilhaResult.Desempilhar());
+                                pilhaResult.Empilhar(SubExpressao(a, b, Convert.ToChar(sinal)));
+                            }                           
+                        }
+                        else
+                        {
+                            if (sinal == "@")
+                            {
+                                double result = -b;
+                                pilhaResult.Empilhar(result + "");
+                            }
+                        }
+                        
                     }
                     pilha.Empilhar(vetInfixo[indice] + "");
                 }
-                else                    
+                else
                 {
                     pilhaResult.Empilhar(vetInfixo[indice]);
-                }                   
+                }
             }
 
-            while(!pilha.EstaVazia())
+            while (!pilha.EstaVazia())
             {
-                double b = double.Parse(pilhaResult.Desempilhar());
-                double a = double.Parse(pilhaResult.Desempilhar());
                 string sinal = pilha.Desempilhar();
+                double b = double.Parse(pilhaResult.Desempilhar());
 
-                pilhaResult.Empilhar(SubExpressao(a, b,Convert.ToChar(sinal)));
+                if (sinal != "@")
+                {
+                    double a = double.Parse(pilhaResult.Desempilhar());
+                    pilhaResult.Empilhar(SubExpressao(a, b, Convert.ToChar(sinal)));
+                }
+                else
+                {
+                    if (sinal == "@")
+                    {
+                        double result = -b;
+                        pilhaResult.Empilhar(result + "");
+                    }
+                }
             }
-            
+
             return pilhaResult.Desempilhar();
         }
 
