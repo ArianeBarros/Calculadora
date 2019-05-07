@@ -13,8 +13,8 @@ namespace apCalculadora
     public partial class FrmCalculadora : Form  
     {
         private Expressao pilha;
-        //private PilhaHerdaLista<double> pilha;
         //txtVisor.Text = txtVisor.Text.Length > 0 ? txtVisor.Text.Substring(0, txtVisor.Text.Length - 1) : "";
+
         public FrmCalculadora()
         {
             InitializeComponent();
@@ -46,38 +46,6 @@ namespace apCalculadora
 
         private void btnIgual_Click(object sender, EventArgs e)
         {
-            //string[] texto = new string[26];
-            //int qtd = 0;
-            //for(int k = 0; k < txtVisor.Text.Length; k++)
-            //{
-            //    texto[k] = txtVisor.Text.Substring(k, 1);
-            //    qtd++;
-            //}
-            //string[] vetor = new string[txtVisor.Text.Length];
-
-            //for (int i = 0; i < qtd; i++)
-            //{            
-            //    if (texto[i].Equals("0") && texto[i].Equals("9")) //Se o caractere atual for número
-            //    {
-            //        if (i != 0 && texto[i - 1].Equals("0") && texto[i - 1].Equals("9"))
-            //        {//Se o dado anterior também for um número
-            //            vetor[i] = texto[i] + texto[i - 1] + "";
-            //        }
-            //        else
-            //            vetor[i] = texto[i] + "";
-            //    }
-            //    else
-            //    {
-            //        if (texto[i].Equals("A") && texto[i].Equals("Z"))  //Se o caractere atual for letra
-            //            MessageBox.Show("Erro");
-            //        else //É um sinal
-            //        {
-            //            vetor[i] = texto[i] + "";
-            //        }
-
-            //    }
-            //}
-
             lbInfixa.Visible = true;
             
             string infixa = pilha.ParaInfixa(txtVisor.Text);
