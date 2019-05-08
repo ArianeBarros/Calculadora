@@ -24,18 +24,18 @@ namespace apCalculadora
             string s = ((Button)sender).Text; //Variável local que recebe qual foi o botão selecionado pelo usuário
 
             if ((((Button)sender).Text) == "CE")
-            {
+            { //Caso o botão selecionado seja CE, retiramos o último elemento da sequencia
                 txtVisor.Text = txtVisor.Text.Length > 0 ? txtVisor.Text.Substring(0, txtVisor.Text.Length - 1) : "";
             }
             else if ((((Button)sender).Text) == "C")
-            {
+            { //Caso o botão selecionado seja C, apagamos toda a sequencia escrita no txtVisor
                 txtVisor.Clear();
                 txtResultado.Clear();
                 lbInfixa.Text = "";
                 lbPosfixa.Text = "";
             }
             else
-                txtVisor.Text += s;
+                txtVisor.Text += s; //Caso o botão selecionado não seja 'CE' ou 'C', acrescentamos o simbolo escolhido na sequencia
         }
 
         private void btnIgual_Click(object sender, EventArgs e) //Método chamado quando o usuário seleciona o btnIgual

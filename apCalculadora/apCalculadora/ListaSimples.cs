@@ -3,6 +3,10 @@ using System.Windows.Forms;
 
 public class ListaSimples<Dado> where Dado : IComparable<Dado>
 {
+    /*
+    Função da classeeee
+    */
+
     private NoLista<Dado> primeiro, ultimo, anterior, atual;
     int quantosNos;    
     public ListaSimples()
