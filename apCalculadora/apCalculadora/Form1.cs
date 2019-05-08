@@ -47,7 +47,7 @@ namespace apCalculadora
         private void btnIgual_Click(object sender, EventArgs e)
         {
             lbInfixa.Visible = true;
-            
+            lbPosfixa.Visible = true;
             string infixa = pilha.ParaInfixa(txtVisor.Text);            
 
             if (infixa == null)
@@ -58,7 +58,6 @@ namespace apCalculadora
             else
             {
                 lbInfixa.Text = infixa;
-                lbPosfixa.Visible = true;
                 lbPosfixa.Text = pilha.ParaPosfixa(txtVisor.Text);
                 txtResultado.Text = pilha.Resolver(txtVisor.Text);
             }                        
