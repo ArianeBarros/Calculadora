@@ -3,16 +3,16 @@ using System.Windows.Forms;
 
 public class ListaSimples<Dado> where Dado : IComparable<Dado>
 {
+    /*
+    Função da classeeee
+    */
+
     private NoLista<Dado> primeiro, ultimo, anterior, atual;
-    int quantosNos;
-
-    private bool primeiroAcessoDoPercurso;
-
+    int quantosNos;    
     public ListaSimples()
     {
         primeiro = ultimo = anterior = atual = null;
         quantosNos = 0;
-        primeiroAcessoDoPercurso = false;
     }
     public void percorrerLista()
     {
