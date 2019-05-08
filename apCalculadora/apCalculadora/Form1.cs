@@ -48,8 +48,7 @@ namespace apCalculadora
         {
             lbInfixa.Visible = true;
             
-            string infixa = pilha.ParaInfixa(txtVisor.Text);
-            
+            string infixa = pilha.ParaInfixa(txtVisor.Text);            
 
             if (infixa == null)
             {

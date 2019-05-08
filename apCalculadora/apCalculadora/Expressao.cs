@@ -68,38 +68,7 @@ namespace apCalculadora
             }
 
             return posfixa;
-
-            //string posfixa = "";
-
-            //if (!VerificarParenteses(expressaoInfixa))
-            //    return null;
-
-            //char letra = 'A';
-
-            //for (int indice = 0; indice < qtd; indice++)
-            //{
-            //    if (SeEhSinal(vetInfixo[indice]) || vetInfixo[indice] == "@")
-            //    {
-            //        while(!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), vetInfixo[indice]))
-            //        {
-            //            posfixa += pilha.Desempilhar();
-            //        }
-            //        pilha.Empilhar(vetInfixo[indice]);                    
-            //    }                  
-            //    else
-            //    {
-            //        posfixa += letra;
-            //        letra++;
-            //    }
-
-            //}
-
-            //for (int l = qtd; !pilha.EstaVazia(); l++)
-            //{
-            //    posfixa += pilha.Desempilhar();
-            //}
-
-            //return posfixa;
+            
         }
 
 
@@ -107,6 +76,11 @@ namespace apCalculadora
         {
             string infixa = "";
             qtd = 0;
+
+           expressaoInfixa = Ordenar(expressaoInfixa);
+
+            if (!VerificarParenteses(expressaoInfixa))
+                return null;
 
             if (expressaoInfixa[0] == '-')
             {
@@ -208,32 +182,6 @@ namespace apCalculadora
             return true;
         }
 
-        //public string Resolver(st)
-        //{
-        //    PilhaHerdaLista<string> pilhaResult = new PilhaHerdaLista<string>();
-
-        //    for (int indice = 0; indice < qtd; indice++)
-        //    {
-        //        if (SeEhSinal(vetInfixo[indice] + ""))
-        //        {
-        //            while (!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), vetInfixo[indice] + ""))
-        //            {
-        //                double b = double.Parse(pilhaResult.Desempilhar());
-        //                double a = double.Parse(pilhaResult.Desempilhar());
-        //                string sinal = pilha.Desempilhar();
-
-        //                pilhaResult.Empilhar(SubExpressao(a, b, Convert.ToChar(sinal)));
-        //            }
-        //            pilha.Empilhar(vetInfixo[indice] + "");
-        //        }
-        //        else
-        //        {
-        //            pilhaResult.Empilhar(vetInfixo[indice]);
-        //        }
-        //    }
-        //    return pilhaResult.Desempilhar();
-        //}
-
         public string Resolver(string expressao)
         {
             PilhaHerdaLista<string> pilhaResult = new PilhaHerdaLista<string>();
@@ -310,6 +258,33 @@ namespace apCalculadora
                 case '^': return (Math.Pow(op1, op2)).ToString();
                 default: return null;
             }
+        }
+
+        public string Ordenar(string exp)  //ARRUMAR
+        {
+            string ordenada = exp;
+            for(int i = 0; i < exp.Length; i++)
+            {
+                if(SeEhSinal(exp[i] + ""))
+                {
+                    if(SeEhSinal(exp[i - 1] + ""))
+                    {
+                        if(exp[i - 1] == exp[i])
+                        {
+                            string[] aux = exp.Split(exp[i - 1]);
+                            exp = exp.Split(exp[i])[0] + "(" + exp.Split(exp[i])[1] + ")";
+                        }
+                        else
+                            if(exp[i - 1] != ')' && exp[i - 1] != '(' && exp[i] != ')' && exp[i] != '(')//tem erro na sequencia
+                            {
+                                string aux = ordenada.Substring(i);
+                                ordenada = ordenada.Split(exp[i])[0] + "(" + aux + ")";
+                            }
+                    }
+                }
+            }
+
+            return ordenada;
         }
 
         public bool VerificarParenteses(string expressao) //usar no form
