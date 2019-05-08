@@ -8,6 +8,7 @@ namespace apCalculadora
 {
     public class Expressao
     {
+        //Arrumar ordenar(), resover(), comentar e fazer relatorio
         /*
         Função da classeeee
         */
