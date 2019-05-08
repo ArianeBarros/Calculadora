@@ -40,17 +40,15 @@ namespace apCalculadora
 
         private void btnIgual_Click(object sender, EventArgs e) //Método chamado quando o usuário seleciona o btnIgual
         {
-<<<<<<< HEAD
-            lbInfixa.Visible = true;
-            lbPosfixa.Visible = true;
-            string infixa = pilha.ParaInfixa(txtVisor.Text);            
-=======
+            //lbInfixa.Visible = true;
+            //lbPosfixa.Visible = true;
+            //string infixa = pilha.ParaInfixa(txtVisor.Text); 
             string texto = txtVisor.Text; //DEclaração da variável local responsável por guardar o valor da sequência digitada pelo usuário
 
             lbInfixa.Visible = true;  //Código que torna o label que exibirá a sequência infixa visível
             
             string infixa = pilha.ParaInfixa(texto);   //Transforma a sequência digitada pelo usuário, de números para letras, com cada letra representando um número escolhido         
->>>>>>> 7ae9028515bca5c920ddf6ff489aacbe3122e379
+
 
             if (infixa == null) //Caso a sequência digitada esteja desordenada, com parênteses a mais ou a menos
             {
@@ -59,16 +57,10 @@ namespace apCalculadora
             }               
             else 
             {
-<<<<<<< HEAD
-                lbInfixa.Text = infixa;
-                lbPosfixa.Text = pilha.ParaPosfixa(txtVisor.Text);
-                txtResultado.Text = pilha.Resolver(txtVisor.Text);
-=======
                 lbInfixa.Text = infixa; //Caso a sequência seja válida, atribuimos ao lbInfixa o  valor da sequência infixa, na qual cada número é substituido por uma letra
                 lbPosfixa.Visible = true; //Código que torna o label que exibirá a sequência posfixa visível
                 lbPosfixa.Text = pilha.ParaPosfixa(texto); //Atribuimos ao lbPosfixa o  valor da sequência posfixa, a qual(baseada no vetor infixo) retorna uma sequência posfixa, onde os números são também substituidos por letras
                 txtResultado.Text = pilha.Resolver(texto); //Atribuimos ao txtResultado o valor do resultado da conta da sequência dada 
->>>>>>> 7ae9028515bca5c920ddf6ff489aacbe3122e379
             }                        
         }        
 

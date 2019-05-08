@@ -14,12 +14,18 @@ namespace apCalculadora
         */
         PilhaHerdaLista<string> pilha;
 
-        string[] vetInfixo;  //Declaração do vetor infixo, que deve ser global porque é usado em mais de um método           
+        string[] vetInfixo;  //Declaração do vetor infixo, que deve ser global porque é usado em mais de um método
+        string[] vetorPosfixo;  //Declaração do vetor infixo, que deve ser global porque é usado em mais de um método
 
         int qtd = 0;//Variável que guarda a quantidade de valores que são guardados no vetor infixo. Não pode ser local, pois usamos seu valor em quase todos os métodos, já que os vetores usados têm um tamanho de 26 posições. 
         public Expressao() //Construtor padrão da classe Expressao
         {
-<<<<<<< HEAD
+            vetInfixo = new string[26]; //Instanciação do vetor infixo
+            vetorPosfixo = new string[26]; //Instanciação do vetor infixo
+            pilha = new PilhaHerdaLista<string>(); //Instanciação da pilha
+        }
+        public string ParaPosfixa(string expressaoInfixa)
+        {
             string posfixa = "";
             int a = 0;
 
@@ -33,6 +39,7 @@ namespace apCalculadora
                 a++;
             }
             char letra = 'A';
+
 
             for (int indice = a; indice < qtd; indice++)
             {
@@ -48,6 +55,7 @@ namespace apCalculadora
                             a++;
                         }
                         pilha.Desempilhar();
+                        qtd = qtd - 2;
                     }
                     else
                     {
@@ -81,14 +89,10 @@ namespace apCalculadora
                 vetorPosfixo[a] = aux;
                 a++;
             }
-
             return posfixa;
-
-=======
-            vetInfixo = new string[26]; //Instanciação do vetor infixo
-            pilha = new PilhaHerdaLista<string>(); //Instanciação da pilha
->>>>>>> 7ae9028515bca5c920ddf6ff489aacbe3122e379
         }
+
+
 
 
         public string ParaInfixa(string expressaoInfixa)
@@ -151,60 +155,58 @@ namespace apCalculadora
             return infixa;
         }
 
-<<<<<<< HEAD
-=======
-        public string ParaPosfixa(string expressaoInfixa)  //Função ParaPosfixa(), que recebe como parâmetro a sequência digitada pelo usuário
-        {
-            string[] vetorPosfixo = new string[26]; //Declaração e instanciação do vetor posfixo, que não precisa ser global
 
-            string posfixa = ""; //Variável local que retorna a sequência posfixa, com seus números trocados por letras
-            int a = 0;
+        //public string ParaPosfixa(string expressaoInfixa)  //Função ParaPosfixa(), que recebe como parâmetro a sequência digitada pelo usuário
+        //{
+        //    string[] vetorPosfixo = new string[26]; //Declaração e instanciação do vetor posfixo, que não precisa ser global
 
-            //Não precisamos fazer a verificação da ordem dos parenteses aqui, pois já verificamos isso no método ParaInfixa(), chamado antes
-            //if (!VerificarParenteses(expressaoInfixa)) 
-            //    return null;
+        //    string posfixa = ""; //Variável local que retorna a sequência posfixa, com seus números trocados por letras
+        //    int a = 0;
 
-            if (expressaoInfixa[0] == '-') //Verifica se o primeiro caractere é um sinal negativo, caso seja, acrescentamos um @ na sequencia, que irá representa-lo na exibição
-            {
-                posfixa += "@";
-                vetorPosfixo[a] = "@";
-                a++;
-            }
+        //    //Não precisamos fazer a verificação da ordem dos parenteses aqui, pois já verificamos isso no método ParaInfixa(), chamado antes
+        //    //if (!VerificarParenteses(expressaoInfixa)) 
+        //    //    return null;
 
-            char letra = 'A'; //char responsável por representar o número da posição atual, que começa 65, número que quando convertido representa a letra 'A'
+        //    if (expressaoInfixa[0] == '-') //Verifica se o primeiro caractere é um sinal negativo, caso seja, acrescentamos um @ na sequencia, que irá representa-lo na exibição
+        //    {
+        //        posfixa += "@";
+        //        vetorPosfixo[a] = "@";
+        //        a++;
+        //    }
 
-            for (int indice = a; indice < qtd; indice++) //Loop que percorre cada posição ocupada no vetor, para substituirmos os números por letras
-            {
-                if (SeEhSinal(vetInfixo[indice])) //Caso a posição atual guarde um sinal
-                {
-                    while (!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), vetInfixo[indice]))
-                    {
-                        var aux = pilha.Desempilhar();
-                        if (vetInfixo[indice] != ")" && vetInfixo[indice] != "(")
-                            posfixa += aux;
-                        vetorPosfixo[indice] = aux;
-                    }
-                    pilha.Empilhar(vetInfixo[indice]);
-                }
-                else //Caso a posição atual não guarde um sinal, guarda uma letra, portanto concatenamos seu valor à string posfixa
-                {
-                    posfixa += letra; //Concatenação da letra correspondente ao valor atual
-                    letra++;//Adicionamos 1 na variável letra, assim ela representará a próxima letra do alfabeto
-                    vetorPosfixo[indice] = vetInfixo[indice];
-                }
-            }
+        //    char letra = 'A'; //char responsável por representar o número da posição atual, que começa 65, número que quando convertido representa a letra 'A'
 
-            //Loop usado, por exemplo, quando uma sequencia tem apenas uma operação a ser feita(ou seja, tem apenas um sinal)
-            for (int l = qtd; !pilha.EstaVazia(); l++) //Enquanto existir um sinal na pilha, não terminamos de converter a sequencia, portanto não saimos do loop
-            {
-                var aux = pilha.Desempilhar();
-                posfixa += aux;
-                vetorPosfixo[l] = aux;
-            }
+        //    for (int indice = a; indice < qtd; indice++) //Loop que percorre cada posição ocupada no vetor, para substituirmos os números por letras
+        //    {
+        //        if (SeEhSinal(vetInfixo[indice])) //Caso a posição atual guarde um sinal
+        //        {
+        //            while (!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), vetInfixo[indice]))
+        //            {
+        //                var aux = pilha.Desempilhar();
+        //                if (vetInfixo[indice] != ")" && vetInfixo[indice] != "(")
+        //                    posfixa += aux;
+        //                vetorPosfixo[indice] = aux;
+        //            }
+        //            pilha.Empilhar(vetInfixo[indice]);
+        //        }
+        //        else //Caso a posição atual não guarde um sinal, guarda uma letra, portanto concatenamos seu valor à string posfixa
+        //        {
+        //            posfixa += letra; //Concatenação da letra correspondente ao valor atual
+        //            letra++;//Adicionamos 1 na variável letra, assim ela representará a próxima letra do alfabeto
+        //            vetorPosfixo[indice] = vetInfixo[indice];
+        //        }
+        //    }
 
-            return posfixa;             
-        }       
->>>>>>> 7ae9028515bca5c920ddf6ff489aacbe3122e379
+        //    //Loop usado, por exemplo, quando uma sequencia tem apenas uma operação a ser feita(ou seja, tem apenas um sinal)
+        //    for (int l = qtd; !pilha.EstaVazia(); l++) //Enquanto existir um sinal na pilha, não terminamos de converter a sequencia, portanto não saimos do loop
+        //    {
+        //        var aux = pilha.Desempilhar();
+        //        posfixa += aux;
+        //        vetorPosfixo[l] = aux;
+        //    }
+
+        //    return posfixa;             
+        //}       
 
         public bool SeEhSinal(string s)
         {
@@ -287,11 +289,11 @@ namespace apCalculadora
                         }
 
                     }
-                    pilha.Empilhar(vetInfixo[indice] + "");
+                    pilha.Empilhar(vetorPosfixo[indice] + "");
                 }
                 else
                 {
-                    pilhaResult.Empilhar(vetInfixo[indice]);
+                    pilhaResult.Empilhar(vetorPosfixo[indice]);
                 }
             }
 
@@ -403,11 +405,8 @@ namespace apCalculadora
             {
                 if (SeEhSinal(exp[i] + ""))
                 {
-<<<<<<< HEAD
-                    if (SeEhSinal(exp[i - 1] + ""))//erro
-=======
+                    if (SeEhSinal(exp[i - 1] + ""))
                     if(i > 0 && SeEhSinal(exp[i - 1] + ""))
->>>>>>> 7ae9028515bca5c920ddf6ff489aacbe3122e379
                     {
                         if (exp[i - 1] == exp[i])
                         {
