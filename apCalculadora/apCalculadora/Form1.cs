@@ -12,9 +12,6 @@ namespace apCalculadora
 {
     public partial class FrmCalculadora : Form  
     {
-        private Expressao pilha;
-        //txtVisor.Text = txtVisor.Text.Length > 0 ? txtVisor.Text.Substring(0, txtVisor.Text.Length - 1) : "";
-
         private Expressao pilha; //Declaração de uma pilha
       
         public FrmCalculadora()
@@ -22,39 +19,27 @@ namespace apCalculadora
             InitializeComponent();
            
         }
-
-        private void btnUm_Click(object sender, EventArgs e)
         private void btnUm_Click(object sender, EventArgs e) //Método chamado sempre que um botão da calculadora for selecionado
         {
-            string s = ((Button)sender).Text;
             string s = ((Button)sender).Text; //Variável local que recebe qual foi o botão selecionado pelo usuário
 
             if ((((Button)sender).Text) == "CE")
-            {
             { //Caso o botão selecionado seja CE, retiramos o último elemento da sequencia
                 txtVisor.Text = txtVisor.Text.Length > 0 ? txtVisor.Text.Substring(0, txtVisor.Text.Length - 1) : "";
             }
             else if ((((Button)sender).Text) == "C")
-            {
             { //Caso o botão selecionado seja C, apagamos toda a sequencia escrita no txtVisor
                 txtVisor.Clear();
                 txtResultado.Clear();
                 lbInfixa.Text = "";
                 lbPosfixa.Text = "";
             }
-
             else
-            {
-                txtVisor.Text += s;
-                //se tiver um fecha parenteses sem abre
-            }
                 txtVisor.Text += s; //Caso o botão selecionado não seja 'CE' ou 'C', acrescentamos o simbolo escolhido na sequencia
         }
 
-        private void btnIgual_Click(object sender, EventArgs e)
         private void btnIgual_Click(object sender, EventArgs e) //Método chamado quando o usuário seleciona o btnIgual
         {
-            lbInfixa.Visible = true;
             //lbInfixa.Visible = true;
             //lbPosfixa.Visible = true;
             //string infixa = pilha.ParaInfixa(txtVisor.Text); 
@@ -62,25 +47,16 @@ namespace apCalculadora
 
             lbInfixa.Visible = true;  //Código que torna o label que exibirá a sequência infixa visível
             
-            string infixa = pilha.ParaInfixa(txtVisor.Text);            
             string infixa = pilha.ParaInfixa(texto);   //Transforma a sequência digitada pelo usuário, de números para letras, com cada letra representando um número escolhido         
 
 
-            if (infixa == null)
             if (infixa == null) //Caso a sequência digitada esteja desordenada, com parênteses a mais ou a menos
             {
-                MessageBox.Show("Verifique se a sequência está correta.", "Erro!");
-                txtVisor.Clear();
                 MessageBox.Show("Verifique se a sequência está correta.", "Erro!"); //Caso a sequência seja inválida, o método retornará null
                 txtVisor.Clear(); //Código que apaga a sequência errada digitada pelo usuário, deixando o txtVisor livre para uma nova sequência
             }               
-            else
             else 
             {
-                lbInfixa.Text = infixa;
-                lbPosfixa.Visible = true;
-                lbPosfixa.Text = pilha.ParaPosfixa(txtVisor.Text);
-                txtResultado.Text = pilha.Resolver(txtVisor.Text);
                 lbInfixa.Text = infixa; //Caso a sequência seja válida, atribuimos ao lbInfixa o  valor da sequência infixa, na qual cada número é substituido por uma letra
                 lbPosfixa.Visible = true; //Código que torna o label que exibirá a sequência posfixa visível
                 lbPosfixa.Text = pilha.ParaPosfixa(texto); //Atribuimos ao lbPosfixa o  valor da sequência posfixa, a qual(baseada no vetor infixo) retorna uma sequência posfixa, onde os números são também substituidos por letras
@@ -88,10 +64,6 @@ namespace apCalculadora
             }                        
         }        
 
-        private void txtVisor_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!(Char.IsNumber(e.KeyChar)) && !pilha.SeEhSinal((e.KeyChar).ToString()))
-                e.Handled = true;
         private void txtVisor_KeyPress(object sender, KeyPressEventArgs e)//Método chamado sempre que o usuário pressiona alguma tecla do teclado
         {//Como estamos lidando com uma sequência matemática, nela não podem existir algarismos que não sejam ou letra ou sinal
             if (!(Char.IsNumber(e.KeyChar)) && !pilha.SeEhSinal((e.KeyChar).ToString())) //Código que verifica a natureza do char digitado(se é número, letra, sinal ou outro símbolo)
@@ -100,7 +72,6 @@ namespace apCalculadora
 
         private void FrmCalculadora_Load_1(object sender, EventArgs e)
         {
-            pilha = new Expressao();
             pilha = new Expressao(); //Instanciamos uma pilha
         }
     }
