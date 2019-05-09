@@ -21,33 +21,32 @@ namespace apCalculadora
         }
         private void btnUm_Click(object sender, EventArgs e) //Método chamado sempre que um botão da calculadora for selecionado
         {
-            string s = ((Button)sender).Text; //Variável local que recebe qual foi o botão selecionado pelo usuário
+            string ex = txtVisor.Text;
+                string s = ((Button)sender).Text; //Variável local que recebe qual foi o botão selecionado pelo usuário
 
-            if ((((Button)sender).Text) == "CE")
-            { //Caso o botão selecionado seja CE, retiramos o último elemento da sequencia
-                txtVisor.Text = txtVisor.Text.Length > 0 ? txtVisor.Text.Substring(0, txtVisor.Text.Length - 1) : "";
-            }
-            else if ((((Button)sender).Text) == "C")
-            { //Caso o botão selecionado seja C, apagamos toda a sequencia escrita no txtVisor
-                txtVisor.Clear();
-                txtResultado.Clear();
-                lbInfixa.Text = "";
-                lbPosfixa.Text = "";
-                pilha.Resetar();
-            }
-            else
-                txtVisor.Text += s; //Caso o botão selecionado não seja 'CE' ou 'C', acrescentamos o simbolo escolhido na sequencia
+                if ((((Button)sender).Text) == "CE")
+                { //Caso o botão selecionado seja CE, retiramos o último elemento da sequencia
+                    txtVisor.Text = txtVisor.Text.Length > 0 ? txtVisor.Text.Substring(0, txtVisor.Text.Length - 1) : "";
+                }
+                else if ((((Button)sender).Text) == "C")
+                { //Caso o botão selecionado seja C, apagamos toda a sequencia escrita no txtVisor
+                    txtVisor.Clear();
+                    txtResultado.Clear();
+                    lbInfixa.Text = "";
+                    lbPosfixa.Text = "";
+                    pilha.Resetar();
+                }
+                else
+                    txtVisor.Text += s; //Caso o botão selecionado não seja 'CE' ou 'C', acrescentamos o simbolo escolhido na sequencia
+            
         }
 
         private void btnIgual_Click(object sender, EventArgs e) //Método chamado quando o usuário seleciona o btnIgual
         {
-            //lbInfixa.Visible = true;
-            //lbPosfixa.Visible = true;
-            //string infixa = pilha.ParaInfixa(txtVisor.Text); 
             string texto = txtVisor.Text; //DEclaração da variável local responsável por guardar o valor da sequência digitada pelo usuário
 
             lbInfixa.Visible = true;  //Código que torna o label que exibirá a sequência infixa visível
-            
+            lbPosfixa.Visible = true; //Código que torna o label que exibirá a sequência posfixa visível
             string infixa = pilha.ParaInfixa(texto);   //Transforma a sequência digitada pelo usuário, de números para letras, com cada letra representando um número escolhido         
 
 
@@ -62,7 +61,7 @@ namespace apCalculadora
             else 
             {
                 lbInfixa.Text = infixa; //Caso a sequência seja válida, atribuimos ao lbInfixa o  valor da sequência infixa, na qual cada número é substituido por uma letra
-                lbPosfixa.Visible = true; //Código que torna o label que exibirá a sequência posfixa visível
+                
                 lbPosfixa.Text = pilha.ParaPosfixa(texto); //Atribuimos ao lbPosfixa o  valor da sequência posfixa, a qual(baseada no vetor infixo) retorna uma sequência posfixa, onde os números são também substituidos por letras
                 txtResultado.Text = pilha.Resolver(texto); //Atribuimos ao txtResultado o valor do resultado da conta da sequência dada 
             }                        
@@ -77,6 +76,11 @@ namespace apCalculadora
         private void FrmCalculadora_Load_1(object sender, EventArgs e)
         {
             pilha = new Expressao(); //Instanciamos uma pilha
+        }
+
+        private void btnMultiplicar_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

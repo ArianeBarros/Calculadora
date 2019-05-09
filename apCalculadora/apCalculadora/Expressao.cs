@@ -8,7 +8,6 @@ namespace apCalculadora
 {
     public class Expressao
     {
-        //Arrumar ordenar(), resover(), comentar e fazer relatorio
         /*
         Função da classeeee
         */
@@ -30,23 +29,16 @@ namespace apCalculadora
             string posfixa = "";
             int a = 0;
 
-            if (!VerificarParenteses(expressaoInfixa))
-                return null;
-
-            if (expressaoInfixa[0] == '-') //-1+2
-            {
+            if (expressaoInfixa[0] == '-')
                 posfixa += "s";
-                //vetorPosfixo[a] = "@";
-                //a++;
-            }
-            char letra = 'A';
 
+            char letra = 'A';
 
             for (int indice = a; indice < qtd; indice++)
             {
                 if (SeEhSinal(vetInfixo[indice]))
                 {
-                    if(indice != 0 || vetInfixo[indice] == "(")
+                    if (indice != 0 || vetInfixo[indice] == "(")
                     {
                         if (vetInfixo[indice] == ")")
                         {
@@ -58,7 +50,6 @@ namespace apCalculadora
                                 a++;
                             }
                             pilha.Desempilhar();
-                            //qtd--;
                         }
                         else
                         {
@@ -72,14 +63,13 @@ namespace apCalculadora
                                     a++;
                                 }
                             }
-
                             pilha.Empilhar(vetInfixo[indice]);
                         }
-                    }      
+                    }
                 }
                 else
                 {
-                    if(posfixa != "" && indice == 1)
+                    if (posfixa != "" && indice == 1)
                     {
                         posfixa = letra + "-";
                         vetorPosfixo[a] = vetInfixo[indice];
@@ -93,32 +83,27 @@ namespace apCalculadora
                         letra++;
                         vetorPosfixo[a] = vetInfixo[indice];
                         a++;
-                        
+
                     }
-                    
+
                 }
             }
 
             for (int l = qtd; !pilha.EstaVazia(); l++)
             {
                 var aux = pilha.Desempilhar();
-                if(aux != "(")
+                if (aux != "(")
                 {
                     posfixa += aux;
                     vetorPosfixo[a] = aux;
                     a++;
                 }
-               
-            }
 
-           qtd = qtd - qtdParenteses; //Diminuimos 2 na variavel qtd porque os dois parenteses lidos não foram adicionados no vetorPosfixo, que será usado no método Resolver(), portanto deve estar com sua qtd atualizada
+            }
+            qtd = qtd - qtdParenteses; //Diminuimos 2 na variavel qtd porque os dois parenteses lidos não foram adicionados no vetorPosfixo, que será usado no método Resolver(), portanto deve estar com sua qtd atualizada
 
             return posfixa;
         }
-
-
-
-
         public string ParaInfixa(string expressaoInfixa)
         {
             string infixa = ""; //Variável local que retorna a sequência infixa, com seus números trocados por letras
@@ -128,6 +113,7 @@ namespace apCalculadora
 
             if (!VerificarParenteses(expressaoInfixa)) //Verificação da ordem dos parenteses, caso estaja desordenada, não convertemos a expressao, retornamos null, assim uma mensagem de erro é exibida para o usuário
                 return null;
+
 
             if (expressaoInfixa[0] == '-')
             {
@@ -160,7 +146,9 @@ namespace apCalculadora
             {
                 if (SeEhSinal(vetInfixo[indice]))
                 {
-                    if (vetInfixo[indice] != ")" && vetInfixo[indice] != "(")
+                    if(vetInfixo[indice] == "@")
+                        infixa += '-';
+                    else if (vetInfixo[indice] != ")" && vetInfixo[indice] != "(")
                         infixa += vetInfixo[indice];
                     else
                         qtdParenteses++;
@@ -170,9 +158,7 @@ namespace apCalculadora
                     infixa += letra;
                     letra++;
                 }
-
-            }           
-
+            }
             return infixa;
         }
 
@@ -185,27 +171,21 @@ namespace apCalculadora
                 if (SeEhSinal(vetorPosfixo[indice] + ""))
                 {
                     string sinal = vetorPosfixo[indice];
+                    double b = double.Parse(pilhaResult.Desempilhar());
 
-                    
-                        double b = double.Parse(pilhaResult.Desempilhar());
-
-                        if (sinal != "@")
+                    if (sinal != "@")
+                    {
+                        double a = double.Parse(pilhaResult.Desempilhar());
+                        pilhaResult.Empilhar(SubExpressao(a, b, Convert.ToChar(sinal)));
+                    }
+                    else
+                    {
+                        if (sinal == "@")
                         {
-                            double a = double.Parse(pilhaResult.Desempilhar());
-                            pilhaResult.Empilhar(SubExpressao(a, b, Convert.ToChar(sinal)));
-
-                            //if(pilhaResult.QuantosNos == 1)
-                                //return pilhaResult.Desempilhar();
+                            double result = -b;
+                            pilhaResult.Empilhar(result + "");
                         }
-                        else
-                        {
-                            if (sinal == "@")
-                            {
-                                double result = -b;
-                                pilhaResult.Empilhar(result + "");
-                            }
-                        }
-                        // pilha.Empilhar(vetorPosfixo[indice] + "");
+                    }
                 }
                 else
                 {
@@ -227,9 +207,6 @@ namespace apCalculadora
 
         public bool SeTemPreferencia(string empilhado, string emComparacao)
         {
-            /*if (empilhado == emComparacao)
-                return false;*/
-
             if (empilhado == ")")
                 return false;
 
@@ -237,7 +214,6 @@ namespace apCalculadora
             {
                 if (emComparacao == ")")
                     return true;
-
                 return false;
             }
 
@@ -252,7 +228,6 @@ namespace apCalculadora
             {
                 if (emComparacao == "(" || emComparacao == "^")
                     return false;
-
                 return true;
             }
 
@@ -283,26 +258,9 @@ namespace apCalculadora
             string ordenada = exp;
             for (int i = 1; i < exp.Length; i++)
             {
-                if (SeEhSinal(exp[i] + ""))
-                {
-                    if (SeEhSinal(exp[i - 1] + ""))
-                    if(i > 0 && SeEhSinal(exp[i - 1] + ""))
-                    {
-                        if (exp[i - 1] == exp[i])
-                        {
-                            string[] aux = exp.Split(exp[i - 1]);
-                            exp = exp.Split(exp[i])[0] + "(" + exp.Split(exp[i])[1] + ")";
-                        }
-                        else
-                            if (exp[i - 1] != ')' && exp[i - 1] != '(' && exp[i] != ')' && exp[i] != '(')//tem erro na sequencia
-                        {
-                            string aux = ordenada.Substring(i);
-                            ordenada = ordenada.Split(exp[i])[0] + "(" + aux + ")";
-                        }
-                    }
-                }
+                if (SeEhSinal(exp[i] + "") && SeEhSinal(exp[i - 1] + ""))
+                
             }
-
             return ordenada;
         }
 
@@ -334,9 +292,8 @@ namespace apCalculadora
         {
             for (int i = 0; !pilha.EstaVazia() && i < qtd; i++)
             {
-                
                 pilha.Desempilhar();
-                vetInfixo[i]= null;
+                vetInfixo[i] = null;
                 vetorPosfixo[i] = null;
             }
             qtdParenteses = 0;
