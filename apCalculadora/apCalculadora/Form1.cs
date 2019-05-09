@@ -33,6 +33,7 @@ namespace apCalculadora
                 txtResultado.Clear();
                 lbInfixa.Text = "";
                 lbPosfixa.Text = "";
+                pilha.Resetar();
             }
             else
                 txtVisor.Text += s; //Caso o botão selecionado não seja 'CE' ou 'C', acrescentamos o simbolo escolhido na sequencia
