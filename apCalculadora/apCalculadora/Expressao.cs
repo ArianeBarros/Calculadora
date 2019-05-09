@@ -63,10 +63,12 @@ namespace apCalculadora
                         {
                             var aux = pilha.Desempilhar();
                             if (vetInfixo[indice] != "(")
+                            {
                                 posfixa += aux;
-
-                            vetorPosfixo[a] = aux;
-                            a++;
+                                vetorPosfixo[a] = aux;
+                                a++;
+                            }
+                                
                         }
 
                         pilha.Empilhar(vetInfixo[indice]);
@@ -85,9 +87,13 @@ namespace apCalculadora
             for (int l = qtd; !pilha.EstaVazia(); l++)
             {
                 var aux = pilha.Desempilhar();
-                posfixa += aux;
-                vetorPosfixo[a] = aux;
-                a++;
+                if(aux != "(")
+                {
+                    posfixa += aux;
+                    vetorPosfixo[a] = aux;
+                    a++;
+                }
+               
             }
             return posfixa;
         }
@@ -266,29 +272,57 @@ namespace apCalculadora
             {
                 if (SeEhSinal(vetorPosfixo[indice] + ""))
                 {
-                    while (!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), vetorPosfixo[indice] + ""))
-                    {
-                        string sinal = pilha.Desempilhar();
-                        double b = double.Parse(pilhaResult.Desempilhar());
+                    //while (!pilha.EstaVazia()) // && !SeTemPreferencia(pilha.OTopo(), vetorPosfixo[indice] + "")
+                    //{
+                        string sinal = pilha.OTopo();
+
 
                         if (sinal != "@")
                         {
-                            if (sinal != ")" && sinal != "(")
+                            //if (sinal == ")")
+                            //{
+                            //    while (sinal != "(" && !pilhaResult.EstaVazia())
+                            //    {
+                            //        double a = double.Parse(pilhaResult.Desempilhar());// erro
+                            //        pilhaResult.Empilhar(SubExpressao(a, b, Convert.ToChar(sinal)));
+                            //        b = double.Parse(pilhaResult.Desempilhar());
+                            //    }
+
+                            //}
+                            //if (sinal != ")" && sinal != "(")
+                            //{
+                            while(!pilha.EstaVazia() && SeTemPreferencia(sinal, vetorPosfixo[indice]))
                             {
+                                sinal = pilha.Desempilhar();
+                                double b = double.Parse(pilhaResult.Desempilhar());
                                 double a = double.Parse(pilhaResult.Desempilhar());// erro
                                 pilhaResult.Empilhar(SubExpressao(a, b, Convert.ToChar(sinal)));
                             }
+                            
+                            //}
+                            //else
+                            //    if (sinal == ")")
+                            //    {
+                            //        while (sinal != "(" && !pilhaResult.EstaVazia())
+                            //        {
+                            //            double a = double.Parse(pilhaResult.Desempilhar());// erro
+                            //            pilhaResult.Empilhar(SubExpressao(a, b, Convert.ToChar(sinal)));
+                            //            b = double.Parse(pilhaResult.Desempilhar());
+                            //        }
+
+                            //    }
                         }
                         else
                         {
                             if (sinal == "@")
                             {
+                                double b = double.Parse(pilhaResult.Desempilhar());
                                 double result = -b;
                                 pilhaResult.Empilhar(result + "");
                             }
                         }
 
-                    }
+                    //}
                     pilha.Empilhar(vetorPosfixo[indice] + "");
                 }
                 else
@@ -319,6 +353,78 @@ namespace apCalculadora
 
             return pilhaResult.Desempilhar();
         }
+
+        //public string Resolver(string expressaoPos)
+        //{
+        //    PilhaHerdaLista<string> pilhaResult = new PilhaHerdaLista<string>();
+
+        //    for (int indice = 0; indice < qtd; indice++)
+        //    {
+        //        if (SeEhSinal(vetorPosfixo[indice] + ""))
+        //        {
+        //            while (!pilha.EstaVazia() && SeTemPreferencia(pilha.OTopo(), vetorPosfixo[indice] + ""))
+        //            {
+        //                string sinal = pilha.Desempilhar();
+        //                double b = double.Parse(pilhaResult.Desempilhar());
+
+        //                if (sinal != "@")
+        //                {
+        //                    if(sinal == ")")
+        //                    {
+        //                        while(sinal != "(" && !pilhaResult.EstaVazia())
+        //                        {
+        //                            double a = double.Parse(pilhaResult.Desempilhar());// erro
+        //                            pilhaResult.Empilhar(SubExpressao(a, b, Convert.ToChar(sinal)));
+        //                            b = double.Parse(pilhaResult.Desempilhar());
+        //                        }
+
+        //                    }
+        //                    //if (sinal != ")" && sinal != "(")
+        //                    //{
+        //                    //    double a = double.Parse(pilhaResult.Desempilhar());// erro
+        //                    //    pilhaResult.Empilhar(SubExpressao(a, b, Convert.ToChar(sinal)));
+        //                    //}
+        //                }
+        //                else
+        //                {
+        //                    if (sinal == "@")
+        //                    {
+        //                        double result = -b;
+        //                        pilhaResult.Empilhar(result + "");
+        //                    }
+        //                }
+
+        //            }
+        //            pilha.Empilhar(vetorPosfixo[indice] + "");
+        //        }
+        //        else
+        //        {
+        //            pilhaResult.Empilhar(vetorPosfixo[indice]);
+        //        }
+        //    }
+
+        //    while (!pilha.EstaVazia())
+        //    {
+        //        string sinal = pilha.Desempilhar();
+        //        double b = double.Parse(pilhaResult.Desempilhar());
+
+        //        if (sinal != "@")
+        //        {
+        //            double a = double.Parse(pilhaResult.Desempilhar());
+        //            pilhaResult.Empilhar(SubExpressao(a, b, Convert.ToChar(sinal)));
+        //        }
+        //        else
+        //        {
+        //            if (sinal == "@")
+        //            {
+        //                double result = -b;
+        //                pilhaResult.Empilhar(result + "");
+        //            }
+        //        }
+        //    }
+
+        //    return pilhaResult.Desempilhar();
+        //}
 
         //public string Resolver(string expressao)
         //{

@@ -54,6 +54,9 @@ namespace apCalculadora
             {
                 MessageBox.Show("Verifique se a sequência está correta.", "Erro!"); //Caso a sequência seja inválida, o método retornará null
                 txtVisor.Clear(); //Código que apaga a sequência errada digitada pelo usuário, deixando o txtVisor livre para uma nova sequência
+                txtResultado.Clear();
+                lbInfixa.Text = "";
+                lbPosfixa.Text = "";
             }               
             else 
             {
