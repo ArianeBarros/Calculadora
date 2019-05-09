@@ -1,6 +1,11 @@
 ﻿using System;
 public class NoLista<Dado> where Dado : IComparable<Dado>
 { 
+{
+    /*
+    Função da classeeee
+    */
+
     Dado info;
     NoLista<Dado> prox;
 

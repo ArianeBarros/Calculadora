@@ -7,7 +7,12 @@ public class ListaSimples<Dado> where Dado : IComparable<Dado>
     int quantosNos;
 
     private bool primeiroAcessoDoPercurso;
+    /*
+    Função da classeeee
+    */
 
+    private NoLista<Dado> primeiro, ultimo, anterior, atual;
+    int quantosNos;    
     public ListaSimples()
     {
         primeiro = ultimo = anterior = atual = null;
