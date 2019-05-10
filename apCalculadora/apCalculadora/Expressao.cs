@@ -8,10 +8,7 @@ namespace apCalculadora
 {
     public class Expressao
     {
-        /*
-        Função da classeeee
-        */
-        PilhaHerdaLista<string> pilha;
+        PilhaHerdaLista<string> pilha; //Declaração da pilha que armazenará os sinais da expressao
 
         string[] vetInfixo;  //Declaração do vetor infixo, que deve ser global porque é usado em mais de um método
         string[] vetorPosfixo;  //Declaração do vetor infixo, que deve ser global porque é usado em mais de um método
@@ -24,6 +21,66 @@ namespace apCalculadora
             vetorPosfixo = new string[26]; //Instanciação do vetor infixo
             pilha = new PilhaHerdaLista<string>(); //Instanciação da pilha
         }
+
+        public string ParaInfixa(string expressaoInfixa)
+        {
+            string infixa = ""; //Variável local que retorna a sequência infixa, com seus números trocados por letras
+            qtd = 0;             
+
+            if (!VerificarParenteses(expressaoInfixa)) //Verificação da ordem dos parenteses, caso estaja desordenada, não convertemos a expressao, retornamos null, assim uma mensagem de erro é exibida para o usuário
+                return null;
+
+
+            if (expressaoInfixa[0] == '-')
+            {
+                vetInfixo[qtd] = "@";
+                qtd++;
+            }
+
+            for (int i = qtd; i < expressaoInfixa.Length; i++)
+            {
+                if (!SeEhSinal(expressaoInfixa[i] + "")) //se é número
+                {
+                    int posicaoInicial = i;
+                    string num = "";
+                    //Percorremos a sequencia até acharmos um sinal, armazenando todos os algarismos lidos, assim obtemos o número inteiro, que pode ter mais de um algarismo
+                    while (posicaoInicial + num.Length < expressaoInfixa.Length && !SeEhSinal(expressaoInfixa[i] + ""))
+                        num += expressaoInfixa[i++];
+                    //Atribuimos à posição atual do vetor o valor numérico encontrado
+                    vetInfixo[qtd] = num;
+                    qtd++;
+                    i = posicaoInicial + num.Length - 1;
+                }
+                else
+                {
+                    //Caso seja sinal, adicionamos o caractere na sequencia infixa
+                    vetInfixo[qtd] = expressaoInfixa[i] + "";
+                    qtd++;
+                }
+            }
+
+            //Para exibirmos a sequencia infixa com seus numeros trocados por letras, fazemos um loop
+            char letra = 'A';
+            for (int indice = 0; indice < qtd; indice++)
+            {
+                if (SeEhSinal(vetInfixo[indice]))
+                {
+                    if (vetInfixo[indice] == "@")
+                        infixa += '-';
+                    else if (vetInfixo[indice] != ")" && vetInfixo[indice] != "(")
+                        infixa += vetInfixo[indice];
+                    else
+                        qtdParenteses++;
+                }
+                else //Assim que um número é encontrado, adiocionamos uma letra em sua referência à sequencia infixa
+                {
+                    infixa += letra;
+                    letra++; //Somamos 1 na variavel letra para que essa passe a representar a próxima letra do alfabeto
+                }
+            }
+            return infixa; //retornamos a sequencia infixa construida
+        }
+
         public string ParaPosfixa(string expressaoInfixa)
         {
             string posfixa = "";
@@ -33,10 +90,10 @@ namespace apCalculadora
                 posfixa += "s";
 
             char letra = 'A';
-
+            //Para construimos a sequencia posfixa e popularmos seu vetor(que será usado no método Resolver()), fazemos um loop que percorre cada posição do vetInfixo
             for (int indice = a; indice < qtd; indice++)
             {
-                if (SeEhSinal(vetInfixo[indice]))
+                if (SeEhSinal(vetInfixo[indice])) //Caso o valor lido seja sinal, verificamos sua preferencia
                 {
                     if (indice != 0 || vetInfixo[indice] == "(")
                     {
@@ -89,6 +146,7 @@ namespace apCalculadora
                 }
             }
 
+            //Caso a pilha de sinais não esteja vazia, temos que esvazia-la na sequencia correta
             for (int l = qtd; !pilha.EstaVazia(); l++)
             {
                 var aux = pilha.Desempilhar();
@@ -102,72 +160,17 @@ namespace apCalculadora
             }
             qtd = qtd - qtdParenteses; //Diminuimos 2 na variavel qtd porque os dois parenteses lidos não foram adicionados no vetorPosfixo, que será usado no método Resolver(), portanto deve estar com sua qtd atualizada
 
-            return posfixa;
-        }
-        public string ParaInfixa(string expressaoInfixa)
+            return posfixa; //Retornamos a sequencia posfixa encontrada 
+        }       
+
+        public string Resolver(string expressaoPos)
         {
-            string infixa = ""; //Variável local que retorna a sequência infixa, com seus números trocados por letras
-            qtd = 0;
-
-            expressaoInfixa = Ordenar(expressaoInfixa);
-
-            if (!VerificarParenteses(expressaoInfixa)) //Verificação da ordem dos parenteses, caso estaja desordenada, não convertemos a expressao, retornamos null, assim uma mensagem de erro é exibida para o usuário
-                return null;
-
-
-            if (expressaoInfixa[0] == '-')
-            {
-                vetInfixo[qtd] = "@";
-                qtd++;
-            }
-
-            for (int i = qtd; i < expressaoInfixa.Length; i++)
-            {
-                if (!SeEhSinal(expressaoInfixa[i] + "")) //é número
-                {
-                    int posicaoInicial = i;
-                    string num = "";
-                    while (posicaoInicial + num.Length < expressaoInfixa.Length && !SeEhSinal(expressaoInfixa[i] + ""))
-                        num += expressaoInfixa[i++];
-
-                    vetInfixo[qtd] = num;
-                    qtd++;
-                    i = posicaoInicial + num.Length - 1;
-                }
-                else
-                {
-                    vetInfixo[qtd] = expressaoInfixa[i] + "";
-                    qtd++;
-                }
-            }
-
-            char letra = 'A';
-            for (int indice = 0; indice < qtd; indice++)
-            {
-                if (SeEhSinal(vetInfixo[indice]))
-                {
-                    if(vetInfixo[indice] == "@")
-                        infixa += '-';
-                    else if (vetInfixo[indice] != ")" && vetInfixo[indice] != "(")
-                        infixa += vetInfixo[indice];
-                    else
-                        qtdParenteses++;
-                }
-                else
-                {
-                    infixa += letra;
-                    letra++;
-                }
-            }
-            return infixa;
-        }
-
-        public string Resolver(string expressaoPos)//73+2*
-        {
+            //Declaração da pilha que guardará o resultado
             PilhaHerdaLista<string> pilhaResult = new PilhaHerdaLista<string>();
 
             for (int indice = 0; indice < qtd; indice++)
             {
+                //Se é sinal, resolvemos uma parte da expressao, atualizando a pilha
                 if (SeEhSinal(vetorPosfixo[indice] + ""))
                 {
                     string sinal = vetorPosfixo[indice];
@@ -189,13 +192,14 @@ namespace apCalculadora
                 }
                 else
                 {
+                    //Caso seja um número, apenas a adicionamos na pilhaResult
                     pilhaResult.Empilhar(vetorPosfixo[indice]);
                 }
             }
             return pilhaResult.Desempilhar();
         }
 
-        public bool SeEhSinal(string s)
+        public bool SeEhSinal(string s) //Método que verifica se uma string é sinal ou não
         {
             bool ehsinal = false;
 
@@ -206,7 +210,7 @@ namespace apCalculadora
         }
 
         public bool SeTemPreferencia(string empilhado, string emComparacao)
-        {
+        {//Método responsável por retornar se o valor empilhado tem preferencia sobre o valor lido
             if (empilhado == ")")
                 return false;
 
@@ -241,7 +245,7 @@ namespace apCalculadora
         }
 
         public string SubExpressao(double op1, double op2, char sinal)
-        {
+        {//Método responsavel por retornar o resultado de uma das operações da expressao dada
             switch (sinal)
             {
                 case '+': return (op1 + op2).ToString();
@@ -251,17 +255,6 @@ namespace apCalculadora
                 case '^': return (Math.Pow(op1, op2)).ToString();
                 default: return null;
             }
-        }
-
-        public string Ordenar(string exp)
-        {
-            string ordenada = exp;
-            for (int i = 1; i < exp.Length; i++)
-            {
-                if (SeEhSinal(exp[i] + "") && SeEhSinal(exp[i - 1] + ""))
-                
-            }
-            return ordenada;
         }
 
         public bool VerificarParenteses(string expressao) //Método bool que verifica se os parenteses de uma sequencia estão ordenados
@@ -288,7 +281,7 @@ namespace apCalculadora
             return true;  //Retornamos true se a sequencia está ordenada
         }
 
-        public void Resetar()
+        public void Resetar() //Método responsavel por resetar os valores de todas as variaveis da classe, para que outra sequencia possa ser analizada
         {
             for (int i = 0; !pilha.EstaVazia() && i < qtd; i++)
             {

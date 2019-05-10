@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace apCalculadora
 {
+    //Ariane Paula Barros - 18173 e Lorenna Leal Nunes - 18343
     public partial class FrmCalculadora : Form  
     {
         private Expressao pilha; //Declaração de uma pilha
@@ -22,9 +23,9 @@ namespace apCalculadora
         private void btnUm_Click(object sender, EventArgs e) //Método chamado sempre que um botão da calculadora for selecionado
         {
             string ex = txtVisor.Text;
-                string s = ((Button)sender).Text; //Variável local que recebe qual foi o botão selecionado pelo usuário
-
-                if ((((Button)sender).Text) == "CE")
+            string s = ((Button)sender).Text; //Variável local que recebe qual foi o botão selecionado pelo usuário
+    
+                 if ((((Button)sender).Text) == "CE")
                 { //Caso o botão selecionado seja CE, retiramos o último elemento da sequencia
                     txtVisor.Text = txtVisor.Text.Length > 0 ? txtVisor.Text.Substring(0, txtVisor.Text.Length - 1) : "";
                 }
@@ -34,11 +35,17 @@ namespace apCalculadora
                     txtResultado.Clear();
                     lbInfixa.Text = "";
                     lbPosfixa.Text = "";
-                    pilha.Resetar();
+                    pilha.Resetar(); //Reseta todas as variaveis da classe Expressao
                 }
                 else
-                    txtVisor.Text += s; //Caso o botão selecionado não seja 'CE' ou 'C', acrescentamos o simbolo escolhido na sequencia
-            
+                {
+                    if(ex == "")
+                        txtVisor.Text += s;
+                    else
+                        if (Char.IsNumber(Convert.ToChar(s)) || !pilha.SeEhSinal(ex.Last() + "") || (pilha.SeEhSinal(ex.Last() + "") && (ex.Last() == '(' || ex.Last() == ')' || s == "(" || s == ")")))
+                                txtVisor.Text += s; //Caso o botão selecionado não seja 'CE' ou 'C', acrescentamos o simbolo escolhido na sequencia
+
+            }          
         }
 
         private void btnIgual_Click(object sender, EventArgs e) //Método chamado quando o usuário seleciona o btnIgual

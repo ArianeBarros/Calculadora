@@ -4,7 +4,7 @@ using System.Windows.Forms;
 public class ListaSimples<Dado> where Dado : IComparable<Dado>
 {
     /*
-    Função da classeeee
+    Classe herdada
     */
 
     private NoLista<Dado> primeiro, ultimo, anterior, atual;

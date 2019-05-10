@@ -2,7 +2,7 @@
 public class NoLista<Dado> where Dado : IComparable<Dado>
 {
     /*
-    Função da classeeee
+    Classe herdada
     */
 
     Dado info;

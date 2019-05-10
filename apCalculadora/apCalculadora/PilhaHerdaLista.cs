@@ -2,7 +2,8 @@
 
 public class PilhaHerdaLista<Dado> : ListaSimples<Dado>, IStack<Dado> 
                                      where Dado : IComparable<Dado>
-{
+{  
+    //Classe herdada
     int qtd = 0;
 
   public PilhaHerdaLista() : base()
